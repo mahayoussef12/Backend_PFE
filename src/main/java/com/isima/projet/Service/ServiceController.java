@@ -37,7 +37,6 @@ public class ServiceController {
     }*/
 @PutMapping("service/{id}")
 public  service updateService(@PathVariable Integer id, @RequestBody service ser)  {
-
     serviceservice.update(ser, id);
     return  ser;
 
