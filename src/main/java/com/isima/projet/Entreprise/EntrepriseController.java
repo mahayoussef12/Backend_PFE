@@ -2,8 +2,8 @@ package com.isima.projet.Entreprise;
 
 import com.google.zxing.WriterException;
 import com.isima.projet.QR.QRCodeGenerator;
-import com.isima.projet.Service.Super_Admin.Super_admin;
-import com.isima.projet.Service.Super_Admin.Super_adminRepository;
+import com.isima.projet.Super_Admin.Super_admin;
+import com.isima.projet.Super_Admin.Super_adminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

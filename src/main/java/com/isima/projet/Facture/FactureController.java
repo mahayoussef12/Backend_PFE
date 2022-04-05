@@ -2,6 +2,8 @@ package com.isima.projet.Facture;
 
 import com.google.zxing.WriterException;
 import com.isima.projet.QR.QRCodeGenerator;
+import com.isima.projet.Service.ServiceRepository;
+import com.isima.projet.Service.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +16,30 @@ public class FactureController {
     private static final String QR_CODE_IMAGE_PATH = "./src/main/resources/QRCodeFacture.png";
     @Autowired
     private ServiceFacture serviceFacture;
-
+    @Autowired
+    private ServiceRepository repos;
     @PostMapping("/ajouter/fac")
-    private String createfac(@RequestBody Facture fac) throws IOException, WriterException {
+    private Facture createfac(@RequestBody Facture fac) throws IOException, WriterException {
 
-         QRCodeGenerator.generateQRCodeImage(String.valueOf(fac.getEtat()),350,350,QR_CODE_IMAGE_PATH);
 
-        fac.setCode("./src/main/resources/QRCodeFacture.png");
+        List<service> serv = repos.findAll();
+
+        for (int i = 0; i < serv.size(); i++) {
+            fac.setPrix_unitaire_HT(serv.get(i).getPrix_unitaire_HT());
+
+            fac.setTotal_Ht(serv.get(i).getPrix_unitaire_HT()*fac.getQuantite());
+
+
+            float x = (float) ((fac.getTotal_Ht() * (fac.getTva() / 100)) + fac.getTotal_Ht());
+            float a = x - ((x * fac.getRemise()) / 100);
+            fac.setTolale_TTC(a);
+             QRCodeGenerator.generateQRCodeImage(String.valueOf(fac.getTolale_TTC()),350,350,QR_CODE_IMAGE_PATH);
+
+            fac.setCode("./src/main/resources/QRCodeFacture.png");
+        }
+
         serviceFacture.save(fac);
-        return "Facture creer avec succes !! vous permet de Coonsulter le Code Qr ";
+        return fac;
     }
 
     @GetMapping("/factures")

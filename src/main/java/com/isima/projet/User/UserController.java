@@ -14,9 +14,18 @@ public class UserController {
 @Autowired
 private PasswordEncoder encoder;
 
+    @PostMapping("/user/test")
+    public utilisateur create(@RequestBody utilisateur utilisateur) {
+        utilisateur.setMdp(encoder.encode(utilisateur.getMdp()));
+         return utilisateur;
+
+    }
     @PostMapping("/user/ajouter")
     public utilisateur createClient(@RequestBody utilisateur utilisateur) {
+        utilisateur.setMdp(encoder.encode(utilisateur.getMdp()));
+        return  serviceUser.save( utilisateur);
 
-         return serviceUser.save(utilisateur);
+    }
 
-    }}
+
+}

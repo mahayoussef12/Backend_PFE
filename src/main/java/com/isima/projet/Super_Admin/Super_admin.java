@@ -1,4 +1,4 @@
-package com.isima.projet.Service.Super_Admin;
+package com.isima.projet.Super_Admin;
 
 import com.isima.projet.Rendez_vous.RDV;
 import com.isima.projet.User.utilisateur;

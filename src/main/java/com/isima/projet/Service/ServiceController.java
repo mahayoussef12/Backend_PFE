@@ -35,6 +35,14 @@ public class ServiceController {
         ser1.setType(ser.getType());
         return repo.save(ser);
     }*/
+@PutMapping("service/{id}")
+public  service updateService(@PathVariable Integer id, @RequestBody service ser)  {
+
+    serviceservice.update(ser, id);
+    return  ser;
+
+}
+
 
     @DeleteMapping("/service/delete/{id}")
     public void deleteService(@PathVariable Integer id){

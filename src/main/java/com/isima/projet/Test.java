@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableJpaAuditing
 @EnableScheduling
 @SecurityScheme(name = "pfe", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
-@OpenAPIDefinition(info = @Info(title = "Employees API", version = "2.0", description = "Employees Information"))
+@OpenAPIDefinition(info = @Info(title = "API", version = "2.0", description = "Employees Information"))
 public class Test {
 	public static void main(String[] args) {
 		SpringApplication.run(Test.class, args);

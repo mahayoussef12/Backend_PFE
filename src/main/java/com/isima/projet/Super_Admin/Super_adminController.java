@@ -1,4 +1,4 @@
-package com.isima.projet.Service.Super_Admin;
+package com.isima.projet.Super_Admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

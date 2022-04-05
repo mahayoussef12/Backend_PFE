@@ -2,7 +2,7 @@ package com.isima.projet.User;
 
 import com.isima.projet.Client.Client;
 import com.isima.projet.Entreprise.Entreprise;
-import com.isima.projet.Service.Super_Admin.Super_admin;
+import com.isima.projet.Super_Admin.Super_admin;
 import lombok.*;
 
 import javax.persistence.*;

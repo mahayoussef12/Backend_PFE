@@ -15,17 +15,22 @@ import java.util.Date;
 @AllArgsConstructor
 public class Facture {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private long id_facture;
     private Date date_creation;
     private Date date_validation;
-    private float tva;
-    private float ttc;
-    private float remise;
-    private float montant;
+    private float prix_unitaire_HT;
+
     private status etat;
     private String code;
     private int num_facture ;
+    private int quantite;
+
+    private float total_Ht;
+    private float tva;
+    private int remise;
+    private float tolale_TTC;
+
     @OneToMany(mappedBy = "facture")
     private Collection<Client>client;
 

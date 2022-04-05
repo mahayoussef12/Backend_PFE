@@ -19,9 +19,10 @@ public class service {
     private  Integer id_service;
     private  String lib_service;
     private String description ;
+    private float prix_unitaire_HT;
     private  String type;
-    private Integer cout;
-    private Float  tax;
+
+
     @OneToOne
     private RDV rdv;
 }

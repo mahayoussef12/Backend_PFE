@@ -26,7 +26,6 @@ public class Task {
     @Autowired
     protected ClientRepository repoc;
 
-
     private int FixedDelay;
     SimpleDateFormat dateFormat = new
             SimpleDateFormat("yyyy-MM-dd");

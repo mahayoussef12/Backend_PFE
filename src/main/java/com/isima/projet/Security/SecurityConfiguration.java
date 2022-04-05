@@ -16,8 +16,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/api/v1/client/**",
             "/api/v1/entreprise/**",
             "/api/v1/avis/**",
-            "http://localhost:8080/api/v1/client/ajouter",
-            "api/v1/user/ajouter"
+            "api/v1/user/ajouter",
+            "/chat"
 
     };
 

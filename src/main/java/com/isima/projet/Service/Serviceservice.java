@@ -34,9 +34,19 @@ public class Serviceservice {
     {
         repoS.deleteById(id);
     }
+
     public void update( service ser,  Integer id)
     {
-        repoS.save(ser);
+        service service = repoS.findById(id).get();
+
+        service.setLib_service(ser.getLib_service());
+        service.setDescription(ser.getDescription());
+        service.setType(ser.getType());
+        service.setPrix_unitaire_HT(ser.getPrix_unitaire_HT());
+
+
+        repoS.save(service);
+
     }
 
 }
