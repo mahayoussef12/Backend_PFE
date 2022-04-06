@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,17 +25,19 @@ public class Entreprise {
 	private long id;
 
 	private String mat_fiscale;
-	private String Batinda;
+
 	private String nom_gerant;
 	private String tel_gerant;
-	private String nom;
-	private String prenom;
+	private String nomSociete;
+	private String Batinda;
 	private String tel;
 	private  String email;
 	private String mdp;
 	private String image;
 	private String categorie;
 	private String ville ;
+	private String adresse ;
+	private Date CreationEntreprise;
 	//private String Jours;
 	//private  String heure;
 	@OneToMany(mappedBy = "entreprise")

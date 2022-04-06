@@ -53,7 +53,7 @@ public class EntrepriseController {
         message.setText("vous etes inscrie dans notre platform !! ");
         this.emailSender.send(message);
         entreprise.setMdp(encoder.encode(entreprise.getMdp()));
-        String description ="Nom:"+entreprise.getNom()+"Telephone:"+entreprise.getTel()+"Email:"+entreprise.getEmail();
+        String description ="Nom:"+entreprise.getNomSociete()+"Telephone:"+entreprise.getTel()+"Email:"+entreprise.getEmail();
         QRCodeGenerator.generateQRCodeImage(description,350,350,QR_CODE_IMAGE_PATH);
         return serviceEntreprise.save(entreprise);
     }
