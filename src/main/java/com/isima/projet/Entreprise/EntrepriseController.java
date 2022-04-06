@@ -42,9 +42,6 @@ public class EntrepriseController {
         return serviceEntreprise.getBynom(nomSociete);  }*/
     @GetMapping("/entrepriseEmail/{email}")
     public List<Entreprise> getAllEmail(@PathVariable String email){return  serviceEntreprise.GetEmail(email);}
-   /* @GetMapping("/entrepriseCategorie/{categorie}")
-    public List<Entreprise> getAllCategorie(@PathVariable String categorie){return  serviceEntreprise.GetCategorie(categorie);}
-*/
     @GetMapping("/entreprise/{categorie}/{ville}")
     public  List<Entreprise> GetAllVille(@PathVariable String categorie,@PathVariable String ville){return serviceEntreprise.GetVilleandcategorie(categorie,ville); }
 
