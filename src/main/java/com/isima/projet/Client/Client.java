@@ -1,6 +1,5 @@
 package com.isima.projet.Client;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.isima.projet.Avis.Avis;
 import com.isima.projet.Facture.Facture;
 import com.isima.projet.Messagerie.messagerie;
@@ -35,19 +34,16 @@ public class Client {
 	private String mdp;
 	private String images;
 	@OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
-	/*@JsonProperty(access = JsonProperty.Access.READ_ONLY)*/
+
 	private List<messagerie> messageries;
 
-	@OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
-	/*@JsonProperty(access = JsonProperty.Access.READ_ONLY)*/
+	@OneToMany(mappedBy = "client")
 	private List<RDV>rdv;
 
-	@OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@OneToMany(mappedBy = "client")
 	private List<Avis> avis;
 
 	@ManyToOne
-	/*@JsonProperty(access = JsonProperty.Access.READ_ONLY)*/
 	private Facture facture;
 	@OneToOne
 	private utilisateur users;

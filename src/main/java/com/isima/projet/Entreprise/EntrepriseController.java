@@ -37,13 +37,16 @@ public class EntrepriseController {
     @GetMapping("/entreprise/{id}")
     public Entreprise getEntrepriseById(@PathVariable long id) {
         return serviceEntreprise.getById(id);  }
+   // @GetMapping("/entreprise/{nomSociete}")
+   /* public Entreprise getEntrepriseByNom(@PathVariable String nomSociete) {
+        return serviceEntreprise.getBynom(nomSociete);  }*/
     @GetMapping("/entrepriseEmail/{email}")
     public List<Entreprise> getAllEmail(@PathVariable String email){return  serviceEntreprise.GetEmail(email);}
-    @GetMapping("/entrepriseCategorie/{categorie}")
+   /* @GetMapping("/entrepriseCategorie/{categorie}")
     public List<Entreprise> getAllCategorie(@PathVariable String categorie){return  serviceEntreprise.GetCategorie(categorie);}
-
-    @GetMapping("/entrepriseVille/{ville}")
-    public  List<Entreprise> GetAllVille(@PathVariable String ville){return serviceEntreprise.GetVille(ville); }
+*/
+    @GetMapping("/entreprise/{categorie}/{ville}")
+    public  List<Entreprise> GetAllVille(@PathVariable String categorie,@PathVariable String ville){return serviceEntreprise.GetVilleandcategorie(categorie,ville); }
 
     @PostMapping("/entreprise/ajouter")
     public Entreprise createEntreprise(@RequestBody Entreprise entreprise) throws IOException, WriterException {
@@ -52,7 +55,7 @@ public class EntrepriseController {
         message.setSubject("Confirmation d'inscri");
         message.setText("vous etes inscrie dans notre platform !! ");
         this.emailSender.send(message);
-        entreprise.setMdp(encoder.encode(entreprise.getMdp()));
+        //entreprise.setMdp(encoder.encode(entreprise.getMdp()));
         String description ="Nom:"+entreprise.getNomSociete()+"Telephone:"+entreprise.getTel()+"Email:"+entreprise.getEmail();
         QRCodeGenerator.generateQRCodeImage(description,350,350,QR_CODE_IMAGE_PATH);
         return serviceEntreprise.save(entreprise);

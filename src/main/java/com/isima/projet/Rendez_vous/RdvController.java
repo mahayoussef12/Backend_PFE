@@ -12,6 +12,9 @@ public class RdvController {
     public static final String AUTH_TOKEN = "fc77906e886a27514d7ac38c5e6fbff8";
     @Autowired
    private ServiceRdv serviceRdv;
+    @Autowired
+    private RDVRepository repoR;
+    private RDV r;
 
     @GetMapping("/rdv")
     public List<RDV> getAllRDV() {
@@ -35,7 +38,20 @@ public class RdvController {
         //rdv1.setHoraire(rdv.getHoraire());
         return repo.save(rdv);
     }*/
+   @GetMapping("/rdv/{id_client}")
+   public RDV getRDVByIdClient(@PathVariable Integer id_client) {
+       List<RDV> rd = repoR.findAll();
+       for (int i = 0; i < rd.size(); i++) {
+           Integer id= (rd.get(i).getClient().getId());
+           if (id_client==id) {
+               RDV  r = repoR.findById(id).get();
 
+           }
+       }
+
+       return r;
+
+   }
     @DeleteMapping("/RDV/delete/{id}")
     public void deleteRDV(@PathVariable Integer id){
         serviceRdv.delete(id);

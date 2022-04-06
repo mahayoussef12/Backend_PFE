@@ -44,7 +44,7 @@ public JavaMailSender emailSender;
 		message.setSubject("Confirmation d'inscri");
 		message.setText("vous etes inscrie dans notre platform !! ");
 		this.emailSender.send(message);
-		client.setMdp(encoder.encode(client.getMdp()));
+		//client.setMdp(encoder.encode(client.getMdp()));
 		 return serviceClient.save(client);
 		//sendSMS();
 //		return "Ajoutée avec succes !!";

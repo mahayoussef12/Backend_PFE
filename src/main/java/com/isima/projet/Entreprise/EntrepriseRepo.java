@@ -12,4 +12,7 @@ public interface EntrepriseRepo extends JpaRepository<Entreprise, Long>{
     List<Entreprise> findByCategorie(String categorie);
 
     List<Entreprise> findByVille(String ville);
+
+    List<Entreprise> findByCategorieAndVille(String categorie, String ville);
+    // Entreprise findByNom(String nomSociete);
 }

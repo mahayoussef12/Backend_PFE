@@ -54,4 +54,14 @@ public class ServiceEntreprise {
         repoE.findByVille(ville ).forEach(entreprises1 -> entreprises.add(entreprises1));
         return entreprises;
     }
+
+    public List<Entreprise> GetVilleandcategorie(String categorie, String ville) {
+        List<Entreprise> entreprises = new ArrayList<Entreprise>();
+        repoE.findByCategorieAndVille(categorie,ville).forEach(entreprises1 -> entreprises.add(entreprises1));
+        return entreprises;
+    }
+
+ /*   public Entreprise getBynom(String nomSociete) {
+        return repoE.findByNom(nomSociete);
+    }*/
 }
