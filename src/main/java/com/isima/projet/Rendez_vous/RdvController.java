@@ -40,11 +40,11 @@ public class RdvController {
         //rdv1.setHoraire(rdv.getHoraire());
         return repo.save(rdv);
     }*/
-   @GetMapping("/clients/{clientId}/clientevents")
-   public ResponseEntity<List<RDV>> getAllClientEventByPackId(@PathVariable(value = "clientId") Long clientId) {
+   @GetMapping("/clients/{EntrepriseId}")
+   public ResponseEntity<List<RDV>> getAllRdvEntreprise(@PathVariable(value = "EntrepriseId") Long EntrepriseId) {
 
-       List<RDV> clientevents = repoR.findByEntrepriseId(clientId);
-       return new ResponseEntity<>(clientevents, HttpStatus.OK);
+       List<RDV> rdv = repoR.findByEntrepriseId(EntrepriseId);
+       return new ResponseEntity<>(rdv, HttpStatus.OK);
    }
     @DeleteMapping("/RDV/delete/{id}")
     public void deleteRDV(@PathVariable Integer id){
