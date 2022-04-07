@@ -21,12 +21,13 @@ public class RDV {
     private Integer id_RDV;
     private Date date_rdv;
    // private Time horaire;
-   @JsonIgnore
+  @JsonIgnore
     @ManyToOne
     public Client client;
     @JsonIgnore
     @ManyToOne
     private Entreprise entreprise;
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "super_admin_id_admin")
     private Super_admin super_admin;
