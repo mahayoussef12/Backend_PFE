@@ -1,6 +1,7 @@
 package com.isima.projet.Entreprise;
 
 import com.isima.projet.Avis.Avis;
+import com.isima.projet.Facture.Facture;
 import com.isima.projet.Messagerie.messagerie;
 import com.isima.projet.Rendez_vous.RDV;
 import com.isima.projet.User.utilisateur;
@@ -48,6 +49,8 @@ public class Entreprise {
 	private  List<Avis>avis;
 	@OneToOne
 	private utilisateur users;
+	@OneToMany(mappedBy = "entreprise")
+	private List<Facture> facture;
 
 
 

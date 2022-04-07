@@ -1,12 +1,12 @@
 package com.isima.projet.Facture;
 
 import com.isima.projet.Client.Client;
+import com.isima.projet.Entreprise.Entreprise;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -31,8 +31,10 @@ public class Facture {
     private int remise;
     private float tolale_TTC;
 
-    @OneToMany(mappedBy = "facture")
-    private Collection<Client>client;
+    @ManyToOne
+    private Client client;
+    @ManyToOne
+    private Entreprise entreprise;
 
 /*
     @ManyToOne(cascade = CascadeType.ALL)
