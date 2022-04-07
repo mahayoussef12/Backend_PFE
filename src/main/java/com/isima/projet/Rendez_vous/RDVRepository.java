@@ -8,5 +8,7 @@ import java.util.List;
 @Repository
 public interface RDVRepository extends JpaRepository<RDV, Integer> {
    List<RDV> findAll();
+   List<RDV> findByClientId(Long Id);
 
+   List<RDV> findByEntrepriseId(Long clientId);
 }

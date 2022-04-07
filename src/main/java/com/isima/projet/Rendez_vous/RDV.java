@@ -1,5 +1,6 @@
 package com.isima.projet.Rendez_vous;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isima.projet.Client.Client;
 import com.isima.projet.Entreprise.Entreprise;
 import com.isima.projet.Super_Admin.Super_admin;
@@ -20,9 +21,10 @@ public class RDV {
     private Integer id_RDV;
     private Date date_rdv;
    // private Time horaire;
-
+   @JsonIgnore
     @ManyToOne
     public Client client;
+    @JsonIgnore
     @ManyToOne
     private Entreprise entreprise;
     @ManyToOne(cascade = CascadeType.ALL)

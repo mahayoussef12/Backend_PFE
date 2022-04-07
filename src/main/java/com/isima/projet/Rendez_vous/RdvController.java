@@ -1,6 +1,8 @@
 package com.isima.projet.Rendez_vous;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,19 +40,11 @@ public class RdvController {
         //rdv1.setHoraire(rdv.getHoraire());
         return repo.save(rdv);
     }*/
-   @GetMapping("/rdv/{id_client}")
-   public RDV getRDVByIdClient(@PathVariable Integer id_client) {
-       List<RDV> rd = repoR.findAll();
-       for (int i = 0; i < rd.size(); i++) {
-           Integer id= (rd.get(i).getClient().getId());
-           if (id_client==id) {
-               RDV  r = repoR.findById(id).get();
+   @GetMapping("/clients/{clientId}/clientevents")
+   public ResponseEntity<List<RDV>> getAllClientEventByPackId(@PathVariable(value = "clientId") Long clientId) {
 
-           }
-       }
-
-       return r;
-
+       List<RDV> clientevents = repoR.findByEntrepriseId(clientId);
+       return new ResponseEntity<>(clientevents, HttpStatus.OK);
    }
     @DeleteMapping("/RDV/delete/{id}")
     public void deleteRDV(@PathVariable Integer id){

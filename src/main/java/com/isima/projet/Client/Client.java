@@ -1,5 +1,6 @@
 package com.isima.projet.Client;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isima.projet.Avis.Avis;
 import com.isima.projet.Facture.Facture;
 import com.isima.projet.Messagerie.messagerie;
@@ -36,7 +37,7 @@ public class Client {
 	@OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
 
 	private List<messagerie> messageries;
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "client")
 	private List<RDV>rdv;
 
