@@ -46,6 +46,13 @@ public class RdvController {
        List<RDV> rdv = repoR.findByEntrepriseId(EntrepriseId);
        return new ResponseEntity<>(rdv, HttpStatus.OK);
    }
+
+    @GetMapping("/maha/{clientID}")
+    public ResponseEntity<List<RDV>> getAllRdvClient(@PathVariable(value = "clientID") int clientID) {
+
+        List<RDV> rdv = repoR.findByClientId(clientID);
+        return new ResponseEntity<>(rdv, HttpStatus.OK);
+    }
     @DeleteMapping("/RDV/delete/{id}")
     public void deleteRDV(@PathVariable Integer id){
         serviceRdv.delete(id);
