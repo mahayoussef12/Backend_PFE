@@ -55,7 +55,9 @@ public class EntrepriseController {
         //entreprise.setMdp(encoder.encode(entreprise.getMdp()));
         String description ="Nom:"+entreprise.getNomSociete()+"Telephone:"+entreprise.getTel()+"Email:"+entreprise.getEmail();
         QRCodeGenerator.generateQRCodeImage(description,350,350,QR_CODE_IMAGE_PATH);
+      entreprise.setCode("./src/main/resources/QRCode.png");
         return serviceEntreprise.save(entreprise);
+
     }
 
     @PutMapping("/entreprise/update/{id}")

@@ -39,6 +39,7 @@ public class Entreprise {
 	private String ville ;
 	private String adresse ;
 	private Date CreationEntreprise;
+	private String code;
 	//private String Jours;
 	//private  String heure;
 	@OneToMany(mappedBy = "entreprise")
