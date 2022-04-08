@@ -31,9 +31,9 @@ public class Facture {
     private int remise;
     private float tolale_TTC;
 
-    @ManyToOne
+    @OneToOne
     private Client client;
-    @ManyToOne
+    @OneToOne
     private Entreprise entreprise;
 
 /*

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1")
 public class FactureController {
@@ -18,6 +18,7 @@ public class FactureController {
     private ServiceFacture serviceFacture;
     @Autowired
     private ServiceRepository repos;
+    @Autowired FactureRepository repo;
     @PostMapping("/ajouter/fac")
     private Facture createfac(@RequestBody Facture fac) throws IOException, WriterException {
 
@@ -46,7 +47,18 @@ public class FactureController {
     public List<Facture> getAllFacture() {
         return serviceFacture.getAll();
     }
+    @GetMapping("/test/{ClientID}")
+    public List<Facture> getFacByNum( @PathVariable Long ClientID){
 
+        List<Facture> facture = repo.findByEntrepriseId(ClientID);
+        return facture;
+    }
+    @GetMapping("/testing/{clID}")
+    public List<Facture> getFacByclient( @PathVariable int clID){
+
+        List<Facture> facture = repo.findByClientId(clID);
+        return facture;
+    }
     @GetMapping("/facture/{id}")
     public Facture getClientById(@PathVariable long id) {
         return serviceFacture.getById(id);

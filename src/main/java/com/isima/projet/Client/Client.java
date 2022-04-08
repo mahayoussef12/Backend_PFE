@@ -44,8 +44,8 @@ public class Client {
 	@OneToMany(mappedBy = "client")
 	private List<Avis> avis;
 
-	@OneToMany(mappedBy = "client")
-	private List<Facture> facture;
+	@OneToOne
+	private Facture facture;
 	@OneToOne
 	private utilisateur users;
 

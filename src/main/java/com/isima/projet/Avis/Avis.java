@@ -1,5 +1,6 @@
 package com.isima.projet.Avis;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isima.projet.Client.Client;
 import com.isima.projet.Entreprise.Entreprise;
 import lombok.AllArgsConstructor;
@@ -22,11 +23,11 @@ public class Avis {
     @Column(name="description")
     private String description;
 
-
+@JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "client_id", nullable = false, unique = true)
     private Client client;
-
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entreprise_id", nullable = false, unique = true)
     private Entreprise entreprise;

@@ -50,8 +50,8 @@ public class Entreprise {
 	private  List<Avis>avis;
 	@OneToOne
 	private utilisateur users;
-	@OneToMany(mappedBy = "entreprise")
-	private List<Facture> facture;
+	@OneToOne
+	private Facture facture;
 
 
 
