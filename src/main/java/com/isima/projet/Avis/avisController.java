@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -47,14 +46,6 @@ private AvisRepository repository;
     @DeleteMapping("/avis/{id}")
     private void deleteAvis(@PathVariable("id") Integer id)
     {serviceAvis.delete(id);}
-    @PutMapping("/employees/{id}")
-    Optional<Avis> replaceEmployee(@RequestBody Avis newEmployee, @PathVariable int id) {
 
-        return repository.findById(id)
-                .map(employee -> {
-                    employee.setDescription(newEmployee.getDescription());
-                    return repository.save(employee);
-                });
-    }
 }
 
