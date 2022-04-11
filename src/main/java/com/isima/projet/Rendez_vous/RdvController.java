@@ -1,5 +1,6 @@
 package com.isima.projet.Rendez_vous;
 
+import com.isima.projet.push.PushNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ public class RdvController {
     @Autowired
     private RDVRepository repoR;
     private RDV r;
+    @Autowired
+    PushNotificationService pushNotificationService;
 
     @GetMapping("/rdv")
     public List<RDV> getAllRDV() {
@@ -55,7 +58,9 @@ public class RdvController {
     }
     @DeleteMapping("/RDV/delete/{id}")
     public void deleteRDV(@PathVariable Integer id){
+        pushNotificationService.Suppression();
         serviceRdv.delete(id);
+
     }
 
 }

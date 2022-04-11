@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class Facture {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_facture;
     private Date date_creation;
     private Date date_validation;

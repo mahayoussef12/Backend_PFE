@@ -4,6 +4,7 @@ import com.google.zxing.WriterException;
 import com.isima.projet.QR.QRCodeGenerator;
 import com.isima.projet.Super_Admin.Super_admin;
 import com.isima.projet.Super_Admin.Super_adminRepository;
+import com.isima.projet.push.PushNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,8 +27,12 @@ public class EntrepriseController {
     Super_adminRepository admin;
     @Autowired
     ServiceEntreprise serviceEntreprise;
+    @Autowired
+    PushNotificationService pushNotificationService;
+
 
     private static final String QR_CODE_IMAGE_PATH = "./src/main/resources/QRCode.png";
+
     private com.isima.projet.Entreprise.Entreprise Entreprise;
 
     @GetMapping("/entreprise")
@@ -69,6 +74,7 @@ public class EntrepriseController {
     public void deleteEntreprise(@PathVariable long id){
        serviceEntreprise.delete(id);
     }
+
     @PostMapping ("/demande_insc")
     public void demande_insc()
     {
@@ -78,6 +84,9 @@ public class EntrepriseController {
         message.setSubject("demande d'inscription");
         message.setText("je veux inscrire dans votre platforme  ");
         this.emailSender.send(message);
+
+
+
     }
 
 }
