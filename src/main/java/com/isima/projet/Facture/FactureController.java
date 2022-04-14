@@ -5,10 +5,19 @@ import com.isima.projet.QR.QRCodeGenerator;
 import com.isima.projet.Service.ServiceRepository;
 import com.isima.projet.Service.service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1")
@@ -37,11 +46,14 @@ public class FactureController {
              QRCodeGenerator.generateQRCodeImage(String.valueOf(fac.getTolale_TTC()),350,350,QR_CODE_IMAGE_PATH);
 
             fac.setCode("./src/main/resources/QRCodeFacture.png");
+           /* loadFile(fac.getCode());*/
+
         }
 
         serviceFacture.save(fac);
         return fac;
     }
+
 
     @GetMapping("/factures")
     public List<Facture> getAllFacture() {
@@ -77,4 +89,35 @@ public class FactureController {
 
         return repo.save(fac);
     }*/
+
+
+    private final Path rootLocation = Paths.get("upload-dir");
+
+
+    public void store(MultipartFile file) {
+        try {
+            Path Pathfile = this.rootLocation.resolve(Objects.requireNonNull(file.getOriginalFilename()));
+            Resource resource = new UrlResource(Pathfile.toUri());
+            if (!resource.exists()) {
+                Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("FAIL!");
+        }
+    }
+
+    public Resource loadFile(String filename) {
+        try {
+            Path file = this.rootLocation.resolve(filename);
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("FAIL!");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("FAIL!");
+        }
+    }
 }
+

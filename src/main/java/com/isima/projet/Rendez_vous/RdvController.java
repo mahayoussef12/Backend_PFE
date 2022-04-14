@@ -1,5 +1,8 @@
 package com.isima.projet.Rendez_vous;
 
+
+import com.isima.projet.calendrier.domain.Event;
+import com.isima.projet.calendrier.repository.EventRepository;
 import com.isima.projet.push.PushNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,8 @@ public class RdvController {
     private RDV r;
     @Autowired
     PushNotificationService pushNotificationService;
-
+    @Autowired
+    EventRepository er;
     @GetMapping("/rdv")
     public List<RDV> getAllRDV() {
         return serviceRdv.getAll();
@@ -32,7 +36,14 @@ public class RdvController {
     }
     @PostMapping("/RDV/ajouter")
     public RDV createRDV(@RequestBody RDV rdv) {
+        Event e = new Event();
+        e.setStart(rdv.getDate_rdv());
+        e.setEnd(rdv.getDate_rdv());
+        e.setText("test");
+        er.save(e);
+
         return serviceRdv.save(rdv);
+
     }
 
    /* @PutMapping("/RDV/{id}")
@@ -54,6 +65,12 @@ public class RdvController {
     public ResponseEntity<List<RDV>> getAllRdvClient(@PathVariable(value = "clientID") int clientID) {
 
         List<RDV> rdv = repoR.findByClientId(clientID);
+        for (int i = 0; i < rdv.size(); i++) {
+        Event e = new Event();
+        e.setStart(rdv.get(i).getDate_rdv());
+        e.setEnd(rdv.get(i).getDate_rdv());
+        e.setText("test");
+        er.save(e);}
         return new ResponseEntity<>(rdv, HttpStatus.OK);
     }
     @DeleteMapping("/RDV/delete/{id}")
@@ -62,5 +79,4 @@ public class RdvController {
         serviceRdv.delete(id);
 
     }
-
 }

@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -19,7 +19,7 @@ public class RDV {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_RDV;
-    private Date date_rdv;
+    private LocalDateTime date_rdv;
    // private Time horaire;
   @JsonIgnore
     @ManyToOne
