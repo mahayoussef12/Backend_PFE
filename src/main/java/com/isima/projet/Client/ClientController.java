@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -51,7 +50,7 @@ public JavaMailSender emailSender;
 		//sendSMS();
 //		return "Ajoutée avec succes !!";
 	}
-
+/*
 	@PutMapping("/employees/{id}")
 	Optional<Client> replaceEmployee(@RequestBody Client newEmployee, @PathVariable int id) {
 
@@ -62,7 +61,7 @@ public JavaMailSender emailSender;
 
 					return repository.save(employee);
 				});
-	}
+	}*/
 
 	@DeleteMapping("/client/delete/{id}")
 	public String deleteEmployee(@PathVariable int id){

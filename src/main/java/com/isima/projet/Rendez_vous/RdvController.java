@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1")
@@ -19,7 +21,7 @@ public class RdvController {
     @Autowired
    private ServiceRdv serviceRdv;
     @Autowired
-    private RDVRepository repoR;
+    private RDVRepository repository;
     private RDV r;
     @Autowired
     PushNotificationService pushNotificationService;
@@ -45,26 +47,28 @@ public class RdvController {
         return serviceRdv.save(rdv);
 
     }
+    @PutMapping("/rdv/{id}")
+    Optional<RDV> replaceEmployee(@RequestBody RDV newrdv, @PathVariable int id) {
+        pushNotificationService.update();
+        return repository.findById(id)
+                .map(employee -> {
+                    employee.setDate_rdv(newrdv.getDate_rdv());
 
-   /* @PutMapping("/RDV/{id}")
-    public RDV updateRDV(@PathVariable Integer id, @RequestBody RDV rdv)  {
-        RDV rdv1=repo.findById(id).get();
-        rdv1.setId_RDV(rdv.getId_RDV());
-        rdv1.setDate_rdv(rdv.getDate_rdv());
-        //rdv1.setHoraire(rdv.getHoraire());
-        return repo.save(rdv);
-    }*/
+                    return repository.save(employee);
+                });
+
+    }
    @GetMapping("/clients/{EntrepriseId}")
    public ResponseEntity<List<RDV>> getAllRdvEntreprise(@PathVariable(value = "EntrepriseId") Long EntrepriseId) {
 
-       List<RDV> rdv = repoR.findByEntrepriseId(EntrepriseId);
+       List<RDV> rdv = repository.findByEntrepriseId(EntrepriseId);
        return new ResponseEntity<>(rdv, HttpStatus.OK);
    }
 
     @GetMapping("/maha/{clientID}")
     public ResponseEntity<List<RDV>> getAllRdvClient(@PathVariable(value = "clientID") int clientID) {
 
-        List<RDV> rdv = repoR.findByClientId(clientID);
+        List<RDV> rdv = repository.findByClientId(clientID);
         for (int i = 0; i < rdv.size(); i++) {
         Event e = new Event();
         e.setStart(rdv.get(i).getDate_rdv());

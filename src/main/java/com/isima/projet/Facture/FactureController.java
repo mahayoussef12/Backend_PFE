@@ -31,7 +31,7 @@ public class FactureController {
     @PostMapping("/ajouter/fac")
     private Facture createfac(@RequestBody Facture fac) throws IOException, WriterException {
 
-
+        byte[] image = new byte[0];
         List<service> serv = repos.findAll();
 
         for (int i = 0; i < serv.size(); i++) {
@@ -44,8 +44,10 @@ public class FactureController {
             float a = x - ((x * fac.getRemise()) / 100);
             fac.setTolale_TTC(a);
              QRCodeGenerator.generateQRCodeImage(String.valueOf(fac.getTolale_TTC()),350,350,QR_CODE_IMAGE_PATH);
+            //QRCodeGenerator.getQRCodeImage("hello", 350, 350);
+            //String qrcode = Base64.getEncoder().encodeToString(image);
 
-            fac.setCode("./src/main/resources/QRCodeFacture.png");
+           // fac.setCode(qrcode);
            /* loadFile(fac.getCode());*/
 
         }
@@ -75,20 +77,7 @@ public class FactureController {
     public Facture getClientById(@PathVariable long id) {
         return serviceFacture.getById(id);
     }
-   /*  @PutMapping("/facture/{id}")
-    private Facture updateEmployee(@PathVariable Long  id, @RequestBody Facture f)
-   {
-        Facture fac = repo.findById(id).get();
-        fac.setDate_creation(f.getDate_creation());
-        fac.setDate_validation(f.getDate_validation());
-        fac.setMontant(f.getMontant());
-        fac.setRemise(f.getRemise());
-        fac.setTva(f.getTva());
-        fac.setTtc(f.getTtc());
-        fac.setNum_facture(f.getNum_facture());
 
-        return repo.save(fac);
-    }*/
 
 
     private final Path rootLocation = Paths.get("upload-dir");
