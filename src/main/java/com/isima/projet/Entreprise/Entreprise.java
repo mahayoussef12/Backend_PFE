@@ -5,6 +5,7 @@ import com.isima.projet.Facture.Facture;
 import com.isima.projet.Messagerie.messagerie;
 import com.isima.projet.Rendez_vous.RDV;
 import com.isima.projet.User.utilisateur;
+import com.isima.projet.calendrier.domain.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,9 +25,7 @@ public class Entreprise {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
 	private String mat_fiscale;
-
 	private String nom_gerant;
 	private String tel_gerant;
 	private String nomSociete;
@@ -42,6 +41,8 @@ public class Entreprise {
 	private String code;
 	//private String Jours;
 	//private  String heure;
+	@OneToMany(mappedBy = "entreprise")
+	private List<Event> events;
 	@OneToMany(mappedBy = "entreprise")
 	private List<messagerie> messagerieList;
 	@OneToMany(mappedBy = "entreprise")

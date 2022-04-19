@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -28,10 +29,24 @@ public class MainController {
 
 
 
-    @GetMapping("/api/events/{from}/{to}")
+   /* @GetMapping("/api/events/{from}/{to}")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    Iterable<Event> events(@PathVariable("from") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime from, @PathVariable("to") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime to) {
+    Iterable<Event> events(@PathVariable long clientid,@PathVariable("from") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime from, @PathVariable("to") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime to) {
         return er.findBetween(from, to);
+    }*/
+    @GetMapping("/api/events/{clientid}/{from}/{to}")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    Iterable<Event> events(@PathVariable int clientid,@PathVariable("from") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime from, @PathVariable("to") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime to) {
+        List<Event> event = er.findByClientId(clientid);
+        return event;
+
+
+    }
+    @GetMapping("/api/eventEntreprise/{entrepriseid}/{from}/{to}")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    Iterable<Event> eventsEntreprise(@PathVariable Long entrepriseid,@PathVariable("from") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime from, @PathVariable("to") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime to) {
+        List<Event> events = er.findByEntrepriseId(entrepriseid);
+        return events;
     }
     @PostMapping("/api/events/create")
     @JsonSerialize(using = LocalDateTimeSerializer.class)

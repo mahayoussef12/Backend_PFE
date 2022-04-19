@@ -6,6 +6,7 @@ import com.isima.projet.Facture.Facture;
 import com.isima.projet.Messagerie.messagerie;
 import com.isima.projet.Rendez_vous.RDV;
 import com.isima.projet.User.utilisateur;
+import com.isima.projet.calendrier.domain.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,6 +49,8 @@ public class Client {
 	private Facture facture;
 	@OneToOne
 	private utilisateur users;
+	@OneToMany(mappedBy = "client")
+	private List <Event> event;
 
 
 }

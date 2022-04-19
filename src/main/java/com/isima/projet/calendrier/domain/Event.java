@@ -1,9 +1,9 @@
 package com.isima.projet.calendrier.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.isima.projet.Client.Client;
+import com.isima.projet.Entreprise.Entreprise;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,9 +18,6 @@ public class Event {
 	LocalDateTime start;
 	
 	LocalDateTime end;
-	
-
-
 	public Long getId() {
 		return id;
 	}
@@ -52,8 +49,11 @@ public class Event {
 	public void setEnd(LocalDateTime end) {
 		this.end = end;
 	}
+	@ManyToOne
+	private Client client;
 
-
+	@ManyToOne
+	private Entreprise entreprise;
 	
 	
 }

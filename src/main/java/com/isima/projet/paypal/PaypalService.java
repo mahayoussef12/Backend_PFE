@@ -1,3 +1,4 @@
+/*
 package com.isima.projet.paypal;
 
 import com.paypal.api.payments.*;
@@ -62,3 +63,4 @@ public class PaypalService {
 	}
 
 }
+*/

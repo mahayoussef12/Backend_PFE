@@ -20,6 +20,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         for(WebSocketSession webSocketSession : webSocketSessions){
+
             webSocketSession.sendMessage(message);
         }
     }

@@ -1,3 +1,4 @@
+/*
 package com.isima.projet.paypal;
 
 import com.paypal.base.rest.APIContext;
@@ -40,3 +41,4 @@ public class PaypalConfig {
 	}
 
 }
+*/

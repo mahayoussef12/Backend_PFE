@@ -47,21 +47,22 @@ public class Task {
             Date date2 = dateFormat.parse(String.valueOf(rdv.get(i).getDate_rdv()));
             int id= (rdv.get(i).getClient().getId());
             long in=(rdv.get(i).getEntreprise().getId());
-
             if (date1.equals(date2)) {
-
                 Client client =repoc.findById(id).get();
                 Entreprise entreprise=repoen.findById(in).get();
                 pushNotificationService.sendPushNotificationToToken();
                 String tel=client.getTel();
                 String tell=entreprise.getTel();
                 Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-
-
                Message message = Message.creator(
                        new PhoneNumber(tel),//The phone number you are sending text to
                            new PhoneNumber("+12396030036"),//The Twilio phone number
                                 "il exciste un rendez vous de Nom"+client.getNom()+client.getPrenom()+date2+"avec "+entreprise.getNomSociete())
+                        .create();
+                Message messagee = Message.creator(
+                                new PhoneNumber(tell),//The phone number you are sending text to
+                                new PhoneNumber("+12396030036"),//The Twilio phone number
+                                "il exciste un rendez vous de Nom"+client.getNom()+client.getPrenom()+date2+"avec "+entreprise.getNomSociete()+rdv.get(i).getDate_rdv())
                         .create();
 
 

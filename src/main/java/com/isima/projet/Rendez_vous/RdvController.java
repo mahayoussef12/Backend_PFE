@@ -41,9 +41,9 @@ public class RdvController {
         Event e = new Event();
         e.setStart(rdv.getDate_rdv());
         e.setEnd(rdv.getDate_rdv());
-        e.setText("test");
+        e.setText("Rendez_vous!");
         er.save(e);
-
+        pushNotificationService.ajouter();
         return serviceRdv.save(rdv);
 
     }

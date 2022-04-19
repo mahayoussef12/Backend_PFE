@@ -1,3 +1,4 @@
+/*
 package com.isima.projet.paypal;
 
 import com.paypal.api.payments.Links;
@@ -61,3 +62,4 @@ public class PaypalController {
 	    }
 
 }
+*/

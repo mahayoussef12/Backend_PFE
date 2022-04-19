@@ -12,6 +12,8 @@ public class PushNotificationService {
     private FCMService_supprimer fcm;
     @Autowired
     private FCMService_update fcmService_update;
+    @Autowired
+    private FCMServiceAjout_RDV fcmServiceAjout_rdv;
 
     public PushNotificationService(FCMService fcmService,FCMService_supprimer fcm) {
         this.fcmService = fcmService;
@@ -43,5 +45,13 @@ public class PushNotificationService {
 
         }
     }
+    public void ajouter() {
+        try {
+           fcmServiceAjout_rdv.sendMessageToToken();
+        } catch (InterruptedException | ExecutionException e) {
+
+        }
+    }
+
 
 }
