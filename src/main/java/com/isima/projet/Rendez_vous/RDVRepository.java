@@ -12,5 +12,5 @@ public interface RDVRepository extends JpaRepository<RDV, Integer> {
 
    List<RDV> findByEntrepriseId(Long clientId);
 
-
+   long countByClientId(int client_id);
 }

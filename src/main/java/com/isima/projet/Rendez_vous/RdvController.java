@@ -83,4 +83,9 @@ public class RdvController {
         serviceRdv.delete(id);
 
     }
+    @GetMapping("/count/{clientid}")
+    public Long testcount(@PathVariable int clientid){
+        Long n=repository.countByClientId(clientid);
+        return n;
+    }
 }
