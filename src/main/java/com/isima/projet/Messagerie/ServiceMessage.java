@@ -1,3 +1,4 @@
+/*
 package com.isima.projet.Messagerie;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,3 +30,4 @@ public class ServiceMessage {
         messagerieRepository.save(message); return message;
     }
 }
+*/

@@ -1,3 +1,4 @@
+
 package com.isima.projet.User;
 
 
@@ -15,17 +16,18 @@ public class UserController {
 private PasswordEncoder encoder;
 
     @PostMapping("/user/test")
-    public utilisateur create(@RequestBody utilisateur utilisateur) {
-        utilisateur.setMdp(encoder.encode(utilisateur.getMdp()));
-         return utilisateur;
+    public User create(@RequestBody User User) {
+        User.setMdp(encoder.encode(User.getMdp()));
+         return User;
 
     }
     @PostMapping("/user/ajouter")
-    public utilisateur createClient(@RequestBody utilisateur utilisateur) {
-        utilisateur.setMdp(encoder.encode(utilisateur.getMdp()));
-        return  serviceUser.save( utilisateur);
+    public User createClient(@RequestBody User User) {
+        User.setMdp(encoder.encode(User.getMdp()));
+        return  serviceUser.save(User);
 
     }
 
 
 }
+

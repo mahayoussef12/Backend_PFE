@@ -2,9 +2,9 @@ package com.isima.projet.Entreprise;
 
 import com.isima.projet.Avis.Avis;
 import com.isima.projet.Facture.Facture;
-import com.isima.projet.Messagerie.messagerie;
+
 import com.isima.projet.Rendez_vous.RDV;
-import com.isima.projet.User.utilisateur;
+import com.isima.projet.User.User;
 import com.isima.projet.calendrier.domain.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,14 +43,14 @@ public class Entreprise {
 	//private  String heure;
 	@OneToMany(mappedBy = "entreprise")
 	private List<Event> events;
-	@OneToMany(mappedBy = "entreprise")
-	private List<messagerie> messagerieList;
+/*	@OneToMany(mappedBy = "entreprise")
+	private List<messagerie> messagerieList;*/
 	@OneToMany(mappedBy = "entreprise")
 	private  List<RDV>rdv;
 	@OneToMany(mappedBy = "entreprise")
 	private  List<Avis>avis;
 	@OneToOne
-	private utilisateur users;
+	private User users;
 	@OneToOne
 	private Facture facture;
 

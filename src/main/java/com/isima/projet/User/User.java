@@ -11,12 +11,18 @@ import javax.persistence.*;
 @NoArgsConstructor @AllArgsConstructor
 @Getter
 @Setter
-public  class utilisateur {
+public  class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private  String email;
+  private  String email;
     private String mdp;
+    @Column(name = "username", unique = true)
+    private String username;
+
+    @Column(name = "connected", nullable = false)
+    private Boolean connected = false;
+
     @ManyToOne
     private Super_admin super_admin;
 

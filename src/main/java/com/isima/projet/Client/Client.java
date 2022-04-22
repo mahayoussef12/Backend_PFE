@@ -3,9 +3,9 @@ package com.isima.projet.Client;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isima.projet.Avis.Avis;
 import com.isima.projet.Facture.Facture;
-import com.isima.projet.Messagerie.messagerie;
+
 import com.isima.projet.Rendez_vous.RDV;
-import com.isima.projet.User.utilisateur;
+import com.isima.projet.User.User;
 import com.isima.projet.calendrier.domain.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,9 +35,9 @@ public class Client {
 	private  String email;
 	private String mdp;
 	private String images;
-	@OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
+	/*@OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
 
-	private List<messagerie> messageries;
+	private List<messagerie> messageries;*/
 	@JsonIgnore
 	@OneToMany(mappedBy = "client")
 	private List<RDV>rdv;
@@ -48,7 +48,7 @@ public class Client {
 	@OneToOne
 	private Facture facture;
 	@OneToOne
-	private utilisateur users;
+	private User users;
 	@OneToMany(mappedBy = "client")
 	private List <Event> event;
 

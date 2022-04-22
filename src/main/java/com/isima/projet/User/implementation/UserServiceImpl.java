@@ -1,22 +1,16 @@
-package com.isima.projet.User;
+package com.isima.projet.User.implementation;
 
+
+import com.isima.projet.User.User;
+import com.isima.projet.User.UserRepository;
+import com.isima.projet.User.UsernameAlreadyUsedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
-public class ServiceUser {
-    @Autowired
-    private PasswordEncoder encoder;
-    @Autowired
-    private UserRepository repository;
+@Service("userService")
+public class UserServiceImpl  {
 
-    public User save(User user)
-    {
-        user.setMdp(encoder.encode(user.getMdp()));
-       return repository.save(user);
-
-    } @Autowired
+    @Autowired
     private UserRepository userDao;
 
 
@@ -36,7 +30,6 @@ public class ServiceUser {
         user.setConnected(true);
         return userDao.save(user);
     }
-
 
     public User disconnect(User user) {
         if (user == null) {

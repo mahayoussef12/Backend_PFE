@@ -19,7 +19,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "api/v1/user/ajouter",
             "/notification/token","/chat",
             "/api/events/create",
-            "/api/**/**/**"
+            "/api/**/**/**",
+            "/login"
 
 
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.isima.projet.calendrier.domain.Event;
 import com.isima.projet.calendrier.repository.EventRepository;
+import com.isima.projet.countType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 public class MainController {
     @Autowired
@@ -66,30 +67,24 @@ public class MainController {
 
         return e;
     }
-
-   /* @PostMapping("/api/events/move")
+    @PostMapping("/api/events/move")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Transactional
-    Event moveEvent( EventMoveParams params) {
+    Event moveEvent(EventMoveParams params) {
 
         Event e = er.findById(params.id).get();
-
-
         e.setStart(params.start);
         e.setEnd(params.end);
-
-
         er.save(e);
 
         return e;
     }
-
     @PostMapping("/api/events/delete")
     @Transactional
     void deleteEvent(@RequestBody EventDeleteParams params) {
         er.deleteById(params.id);
     }
-*/
+
     public static class EventCreateParams {
         public LocalDateTime start=LocalDateTime.of(2022,
                 Month.APRIL, 29, 19, 30, 40);
@@ -109,5 +104,9 @@ public class MainController {
     public static class EventDeleteParams {
         public Long id;
     }
+   @GetMapping("api/v1/sum/{id}")
+    public List<countType>testcount(@PathVariable Long id ){
+       return er.countClientIdByStart(id);
+           }
 
 }

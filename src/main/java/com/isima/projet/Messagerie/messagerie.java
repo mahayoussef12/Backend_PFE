@@ -1,3 +1,4 @@
+/*
 package com.isima.projet.Messagerie;
 
 import com.isima.projet.Client.Client;
@@ -31,3 +32,4 @@ public class messagerie {
 
 
 }
+*/

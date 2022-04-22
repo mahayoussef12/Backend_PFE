@@ -1,7 +1,7 @@
 package com.isima.projet.Super_Admin;
 
 import com.isima.projet.Rendez_vous.RDV;
-import com.isima.projet.User.utilisateur;
+import com.isima.projet.User.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +24,5 @@ public class Super_admin {
   /*  @OneToMany(mappedBy = "super_admin",fetch = FetchType.LAZY)
     public List<Facture> facture;*/
     @OneToMany(mappedBy = "super_admin",fetch = FetchType.LAZY)
-    private List<utilisateur> utilisateurs;
+    private List<User> Users;
 }
