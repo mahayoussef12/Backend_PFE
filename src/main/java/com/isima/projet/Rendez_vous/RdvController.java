@@ -70,11 +70,7 @@ public class RdvController {
 
         List<RDV> rdv = repository.findByClientId(clientID);
         for (int i = 0; i < rdv.size(); i++) {
-        Event e = new Event();
-        e.setStart(rdv.get(i).getDate_rdv());
-        e.setEnd(rdv.get(i).getDate_rdv());
-        e.setText("test");
-        er.save(e);}
+    }
         return new ResponseEntity<>(rdv, HttpStatus.OK);
     }
     @DeleteMapping("/RDV/delete/{id}")
@@ -82,10 +78,5 @@ public class RdvController {
         pushNotificationService.Suppression();
         serviceRdv.delete(id);
 
-    }
-    @GetMapping("/count/{clientid}")
-    public Long testcount(@PathVariable int clientid){
-        Long n=repository.countByClientId(clientid);
-        return n;
     }
 }
