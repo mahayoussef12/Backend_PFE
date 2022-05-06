@@ -2,7 +2,6 @@ package com.isima.projet.Entreprise;
 
 import com.isima.projet.Avis.Avis;
 import com.isima.projet.Facture.Facture;
-
 import com.isima.projet.Rendez_vous.RDV;
 import com.isima.projet.User.User;
 import com.isima.projet.calendrier.domain.Event;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +39,8 @@ public class Entreprise {
 	private String adresse ;
 	private Date CreationEntreprise;
 	private String code;
+	private String test;
+	private LocalDateTime time;
 	//private String Jours;
 	//private  String heure;
 	@OneToMany(mappedBy = "entreprise")

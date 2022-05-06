@@ -37,14 +37,15 @@ public class RdvController {
         return serviceRdv.getById(id);
     }
     @PostMapping("/RDV/ajouter")
-    public RDV createRDV(@RequestBody RDV rdv) {
+    public  ResponseEntity<RDV> createRDV(@RequestBody RDV rdv) {
         Event e = new Event();
         e.setStart(rdv.getDate_rdv());
         e.setEnd(rdv.getDate_rdv());
         e.setText("Rendez_vous!");
         er.save(e);
         pushNotificationService.ajouter();
-        return serviceRdv.save(rdv);
+        serviceRdv.save(rdv);
+        return new ResponseEntity<>(rdv, HttpStatus.OK);
 
     }
     @PutMapping("/rdv/{id}")
@@ -67,10 +68,7 @@ public class RdvController {
 
     @GetMapping("/maha/{clientID}")
     public ResponseEntity<List<RDV>> getAllRdvClient(@PathVariable(value = "clientID") int clientID) {
-
         List<RDV> rdv = repository.findByClientId(clientID);
-        for (int i = 0; i < rdv.size(); i++) {
-    }
         return new ResponseEntity<>(rdv, HttpStatus.OK);
     }
     @DeleteMapping("/RDV/delete/{id}")
@@ -79,4 +77,4 @@ public class RdvController {
         serviceRdv.delete(id);
 
     }
-}
+  }

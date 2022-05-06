@@ -1,6 +1,7 @@
 package com.isima.projet.Rendez_vous;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.isima.projet.Client.Client;
 import com.isima.projet.Entreprise.Entreprise;
 import com.isima.projet.Super_Admin.Super_admin;
@@ -21,12 +22,35 @@ public class RDV {
     private Integer id_RDV;
     private LocalDateTime date_rdv;
    // private Time horaire;
-  @JsonIgnore
+
     @ManyToOne
-    public Client client;
     @JsonIgnore
+    public Client client;
+    @JsonProperty("client")
+    public int get() {
+        return client.getId();
+    }
     @ManyToOne
+    @JsonIgnore
     private Entreprise entreprise;
+ @JsonProperty("entreprise")
+    public long geten(){
+        return entreprise.getId();
+    }
+    public Client getClient() {
+        return  client;
+    }
+    public void SetClient(Client client) {
+        this.client=client;
+    }
+    public Entreprise getEntreprise() {
+        return  entreprise;
+    }
+    public void SetEntreprise(Entreprise entreprise) {
+      this.entreprise=entreprise;
+    }
+
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "super_admin_id_admin")

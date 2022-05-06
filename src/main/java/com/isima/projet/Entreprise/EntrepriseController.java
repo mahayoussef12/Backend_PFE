@@ -1,17 +1,17 @@
 package com.isima.projet.Entreprise;
 
-import com.google.zxing.WriterException;
-import com.isima.projet.QR.QRCodeGenerator;
 import com.isima.projet.Super_Admin.Super_admin;
 import com.isima.projet.Super_Admin.Super_adminRepository;
+import com.isima.projet.code;
 import com.isima.projet.push.PushNotificationService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +37,7 @@ EntrepriseRepo repository;
     private static final String QR_CODE_IMAGE_PATH = "./src/main/resources/QRCode.png";
 
     private com.isima.projet.Entreprise.Entreprise Entreprise;
+    private String success;
 
     @GetMapping("/entreprise")
     public List<Entreprise> getAllEntreprise() {
@@ -53,20 +54,59 @@ EntrepriseRepo repository;
     @GetMapping("/entreprise/{categorie}/{ville}")
     public  List<Entreprise> GetAllVille(@PathVariable String categorie,@PathVariable String ville){return serviceEntreprise.GetVilleandcategorie(categorie,ville); }
 
+    @PostMapping("verif/{id}")
+    public String verif(@PathVariable Long id, @RequestBody code code ) {
+        Entreprise entreprise = serviceEntreprise.getById(id);
+        if ((code.equals(entreprise.getTest()))&&LocalDateTime.now().isBefore(entreprise.getTime())){
+            SimpleMailMessage messa = new SimpleMailMessage();
+            messa.setTo(entreprise.getEmail());
+            messa.setSubject("Confirmation d'inscri");
+            messa.setText("vous etes inscrie dans notre platform !! ");
+            this.emailSender.send(messa);
+            return "true";
+        }
+        else{
+            return"false";
+        }
+    }
+
     @PostMapping("/entreprise/ajouter")
-    public Entreprise createEntreprise(@RequestBody Entreprise entreprise) throws IOException, WriterException {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(entreprise.getEmail());
-        message.setSubject("Confirmation d'inscri");
-        message.setText("vous etes inscrie dans notre platform !! ");
-        this.emailSender.send(message);
-        //entreprise.setMdp(encoder.encode(entreprise.getMdp()));
-        String description ="Nom:"+entreprise.getNomSociete()+"Telephone:"+entreprise.getTel()+"Email:"+entreprise.getEmail();
-        QRCodeGenerator.generateQRCodeImage(description,350,350,QR_CODE_IMAGE_PATH);
-     /* entreprise.setCode("./src/main/resources/QRCode.png");*/
+    public Entreprise createEntreprise(@RequestBody Entreprise entreprise)  {
+
+        entreprise.setMdp(encoder.encode(entreprise.getMdp()));
+
+        Smscode smsCode = createSMSCode();
+        {
+
+//            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+//            String t="+216"+entreprise.getTel();
+//
+//
+//            Message message = Message.creator(
+//                            new PhoneNumber(t),//The phone number you are sending text to
+//                            new PhoneNumber("+12396030036"),//The Twilio phone number
+//                            "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
+//                    .create();
+
+            SimpleMailMessage messa = new SimpleMailMessage();
+            messa.setTo(entreprise.getEmail());
+            messa.setSubject("Code");
+            messa.setText(smsCode.getCode());
+            this.emailSender.send(messa);
+
+        }
+        entreprise.setTest(smsCode.getCode());
+        entreprise.setTime((LocalDateTime) smsCode.getExpireTime());
         return serviceEntreprise.save(entreprise);
 
     }
+    private Smscode createSMSCode() {
+        //Introducing commons Lang package
+        String code = RandomStringUtils.randomNumeric(5);
+        return new Smscode(code, 180);
+    }
+
+
     @PutMapping("/entreprise/{id}")
     Optional<Entreprise> replaceEntreprise(@RequestBody Entreprise newen, @PathVariable long id) {
         pushNotificationService.update();
@@ -87,17 +127,11 @@ EntrepriseRepo repository;
                     employee.setMat_fiscale(newen.getMat_fiscale());
                     return repository.save(employee);
                 });
-
     }
-
-
-
-
     @DeleteMapping("/entreprise/delete/{id}")
     public void deleteEntreprise(@PathVariable long id){
        serviceEntreprise.delete(id);
     }
-
     @PostMapping ("/demande_insc")
     public void demande_insc()
     {
@@ -107,9 +141,5 @@ EntrepriseRepo repository;
         message.setSubject("demande d'inscription");
         message.setText("je veux inscrire dans votre platforme  ");
         this.emailSender.send(message);
-
-
-
     }
-
 }
