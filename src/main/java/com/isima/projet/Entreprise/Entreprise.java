@@ -1,7 +1,6 @@
 package com.isima.projet.Entreprise;
 
-import com.isima.projet.Avis.Avis;
-import com.isima.projet.Facture.Facture;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isima.projet.Rendez_vous.RDV;
 import com.isima.projet.User.User;
 import com.isima.projet.calendrier.domain.Event;
@@ -9,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -43,19 +44,28 @@ public class Entreprise {
 	private LocalDateTime time;
 	//private String Jours;
 	//private  String heure;
-	@OneToMany(mappedBy = "entreprise")
+	@JsonIgnore
+	@OneToMany(mappedBy = "entreprise",cascade = CascadeType.ALL)
 	private List<Event> events;
 /*	@OneToMany(mappedBy = "entreprise")
 	private List<messagerie> messagerieList;*/
-	@OneToMany(mappedBy = "entreprise")
+@JsonIgnore
+	@OneToMany(mappedBy = "entreprise",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
+@OnDelete(action = OnDeleteAction.CASCADE)
 	private  List<RDV>rdv;
-	@OneToMany(mappedBy = "entreprise")
-	private  List<Avis>avis;
-	@OneToOne
+/*	@JsonIgnore
+	@OneToMany(mappedBy = "entreprise",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private  List<Avis>avis;*/
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User users;
-	@OneToOne
+	/*@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Facture facture;
-
+*/
 
 
 

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
+
 @RestController
 @RequestMapping("/api/v1")
 @Tag(name = "avis interface", description = "user related crud interface")
@@ -19,9 +21,11 @@ private AvisRepository repository;
     private ServiceAvis serviceAvis;
     @PostMapping("/avis")
     private Avis create(@RequestBody Avis client){
+
        return serviceAvis.save(client);
 
     }
+
     @Operation(summary = "get user list data")
     @GetMapping("/avis")
     private List<Avis> getAllAvis()
@@ -37,6 +41,10 @@ private AvisRepository repository;
     @DeleteMapping("/avis/{id}")
     private void deleteAvis(@PathVariable("id") Integer id)
     {serviceAvis.delete(id);}
+    @GetMapping("/countavis/{id}")
+    public double count(@PathVariable long id){
+        return repository.testing(id);
+    }
 
 }
 

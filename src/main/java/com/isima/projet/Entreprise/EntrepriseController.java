@@ -1,11 +1,12 @@
 package com.isima.projet.Entreprise;
 
+import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import com.isima.projet.Super_Admin.Super_admin;
 import com.isima.projet.Super_Admin.Super_adminRepository;
-import com.isima.projet.code;
 import com.isima.projet.push.PushNotificationService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -33,12 +33,9 @@ public class EntrepriseController {
     PushNotificationService pushNotificationService;
 @Autowired
 EntrepriseRepo repository;
-
     private static final String QR_CODE_IMAGE_PATH = "./src/main/resources/QRCode.png";
-
     private com.isima.projet.Entreprise.Entreprise Entreprise;
     private String success;
-
     @GetMapping("/entreprise")
     public List<Entreprise> getAllEntreprise() {
         return serviceEntreprise.getAll();
@@ -53,9 +50,16 @@ EntrepriseRepo repository;
     public List<Entreprise> getAllEmail(@PathVariable String email){return  serviceEntreprise.GetEmail(email);}
     @GetMapping("/entreprise/{categorie}/{ville}")
     public  List<Entreprise> GetAllVille(@PathVariable String categorie,@PathVariable String ville){return serviceEntreprise.GetVilleandcategorie(categorie,ville); }
-
+    @GetMapping("/entreprisecategorie/{categorie}")
+    public  List<Entreprise> Getcategorie(@PathVariable String categorie){return serviceEntreprise.Getcategorie(categorie); }
+    @GetMapping("/entrepriseville/{ville}")
+    public  List<Entreprise> Getville(@PathVariable String ville){return serviceEntreprise.GetVille(ville); }
+    @GetMapping("/count/{categorie}")
+    public  int CountGategorie(@PathVariable String categorie){return repository.countAllByCategorie(categorie); }
+    @GetMapping("/countville/{ville}")
+    public  int Countville(@PathVariable String ville){return repository.countAllByVille(ville); }
     @PostMapping("verif/{id}")
-    public String verif(@PathVariable Long id, @RequestBody code code ) {
+    public String verif(@PathVariable Long id, @RequestBody Integer code ) {
         Entreprise entreprise = serviceEntreprise.getById(id);
         if ((code.equals(entreprise.getTest()))&&LocalDateTime.now().isBefore(entreprise.getTime())){
             SimpleMailMessage messa = new SimpleMailMessage();
@@ -107,26 +111,29 @@ EntrepriseRepo repository;
     }
 
 
-    @PutMapping("/entreprise/{id}")
-    Optional<Entreprise> replaceEntreprise(@RequestBody Entreprise newen, @PathVariable long id) {
-        pushNotificationService.update();
-        return repository.findById(id)
-                .map(employee -> {
-                    employee.setBatinda(newen.getBatinda());
-                    employee.setCreationEntreprise(newen.getCreationEntreprise());
-                    employee.setNom_gerant(newen.getNom_gerant());
-                    employee.setTel(newen.getTel());
-                    employee.setTel_gerant(newen.getTel_gerant());
-                    employee.setNomSociete(newen.getNomSociete());
-                    employee.setEmail(newen.getEmail());
-                    employee.setCategorie(newen.getCategorie());
-                    employee.setMdp(newen.getMdp());
-                    employee.setVille(newen.getVille());
-                    employee.setAdresse(newen.getAdresse());
-                    employee.setImage(newen.getImage());
-                    employee.setMat_fiscale(newen.getMat_fiscale());
-                    return repository.save(employee);
-                });
+
+    @PutMapping("/employees/{id}")
+    public ResponseEntity<Entreprise> updateEntreprise(@PathVariable(value = "id") Long id,
+                                              @RequestBody Entreprise newen) throws ResourceNotFoundException {
+        Entreprise employee = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+
+        employee.setBatinda(newen.getBatinda());
+        employee.setCreationEntreprise(newen.getCreationEntreprise());
+        employee.setNom_gerant(newen.getNom_gerant());
+        employee.setTel(newen.getTel());
+        employee.setTel_gerant(newen.getTel_gerant());
+        employee.setNomSociete(newen.getNomSociete());
+        employee.setEmail(newen.getEmail());
+        employee.setCategorie(newen.getCategorie());
+        employee.setMdp(newen.getMdp());
+        employee.setVille(newen.getVille());
+        employee.setAdresse(newen.getAdresse());
+        employee.setImage(newen.getImage());
+        employee.setMat_fiscale(newen.getMat_fiscale());
+
+        final Entreprise updatedEmployee =serviceEntreprise.save(employee);
+        return ResponseEntity.ok(updatedEmployee);
     }
     @DeleteMapping("/entreprise/delete/{id}")
     public void deleteEntreprise(@PathVariable long id){

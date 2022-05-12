@@ -14,5 +14,9 @@ public interface EntrepriseRepo extends JpaRepository<Entreprise, Long>{
     List<Entreprise> findByVille(String ville);
 
     List<Entreprise> findByCategorieAndVille(String categorie, String ville);
+
+   int countAllByCategorie(String categorie);
+   int countAllByVille(String ville);
     // Entreprise findByNom(String nomSociete);
+    
 }

@@ -3,7 +3,12 @@ package com.isima.projet.User;
 import com.isima.projet.Client.Client;
 import com.isima.projet.Entreprise.Entreprise;
 import com.isima.projet.Super_Admin.Super_admin;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -27,8 +32,10 @@ public  class User {
     private Super_admin super_admin;
 
     @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Client client;
     @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Entreprise entreprise;
 }
 

@@ -54,11 +54,21 @@ public class RdvController {
         return repository.findById(id)
                 .map(employee -> {
                     employee.setDate_rdv(newrdv.getDate_rdv());
-
                     return repository.save(employee);
                 });
 
     }
+/*    @PutMapping("/employees/{id}")
+    public ResponseEntity<RDV> updateEmployee(@PathVariable(value = "id") int id,
+                                                   @RequestBody RDV employeeDetails) throws ResourceNotFoundException {
+        RDV employee = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+
+        employee.setDate_rdv(employeeDetails.getDate_rdv());
+
+        final RDV updatedEmployee = repository.save(employee);
+        return ResponseEntity.ok(updatedEmployee);
+    }*/
    @GetMapping("/clients/{EntrepriseId}")
    public ResponseEntity<List<RDV>> getAllRdvEntreprise(@PathVariable(value = "EntrepriseId") Long EntrepriseId) {
 

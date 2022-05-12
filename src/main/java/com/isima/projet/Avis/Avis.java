@@ -1,7 +1,5 @@
 package com.isima.projet.Avis;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.isima.projet.Client.Client;
 import com.isima.projet.Entreprise.Entreprise;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,12 +16,17 @@ public class Avis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_avis;
-    @Column(name="auteur")
+    private int start;
     private String nom_auteur;
-    @Column(name="description")
+    private String prenom_auteur;
+    private String email_auteur;
     private String description;
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+     Entreprise entreprise;
 
-@JsonIgnore
+
+
+  /*  @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "client_id", nullable = false, unique = true)
     private Client client;
@@ -46,5 +49,16 @@ public class Avis {
 
     public void setClient(Client client) {
         this.client = client;
+    }*/
+ /*@JsonProperty("entreprise")
+  public Long getEntrepriseId() {
+      return entreprise.getId();
+  }
+    public Entreprise getEntreprise() {
+        return entreprise;
     }
+
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
+    }*/
 }

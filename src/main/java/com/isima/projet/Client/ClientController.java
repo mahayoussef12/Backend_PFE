@@ -1,8 +1,10 @@
 package com.isima.projet.Client;
 
+import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,6 +52,24 @@ public JavaMailSender emailSender;
 		//sendSMS();
 //		return "Ajoutée avec succes !!";
 	}
+	@PutMapping("/client/{id}")
+	public ResponseEntity<Client> updateClient(@PathVariable(value = "id") int id,
+													   @RequestBody Client client1) throws ResourceNotFoundException {
+		Client client = repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+		client.setAdress(client1.getAdress());
+		client.setNom(client1.getNom());
+		client.setPrenom(client1.getPrenom());
+		client.setTel(client1.getTel());
+		client.setEmail(client1.getEmail());
+		client.setAdress(client1.getAdress());
+		client.setMdp(client1.getMdp());
+		client.setVille(client1.getVille());
+		client.setMdp(client1.getMdp());
+		client.setImages(client1.getImages());
+		final Client updatedEntreprise =serviceClient.save(client);
+		return ResponseEntity.ok(updatedEntreprise);
+	}
 /*
 	@PutMapping("/employees/{id}")
 	Optional<Client> replaceEmployee(@RequestBody Client newEmployee, @PathVariable int id) {
@@ -64,9 +84,9 @@ public JavaMailSender emailSender;
 	}*/
 
 	@DeleteMapping("/client/delete/{id}")
-	public String deleteEmployee(@PathVariable int id){
+	public void deleteClient(@PathVariable int id){
 	   serviceClient.delete(id);
-		return"Suppression avec success";
+
 	}
 Client client;
 	public Message sendSMS() {

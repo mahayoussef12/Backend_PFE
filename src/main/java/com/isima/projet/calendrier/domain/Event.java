@@ -49,10 +49,10 @@ public class Event {
 	public void setEnd(LocalDateTime end) {
 		this.end = end;
 	}
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REMOVE)
 	private Client client;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REMOVE)
 	private Entreprise entreprise;
 	
 	

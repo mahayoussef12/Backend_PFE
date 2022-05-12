@@ -1,13 +1,14 @@
 package com.isima.projet.Rendez_vous;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.isima.projet.Client.Client;
 import com.isima.projet.Entreprise.Entreprise;
 import com.isima.projet.Super_Admin.Super_admin;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,20 +24,22 @@ public class RDV {
     private LocalDateTime date_rdv;
    // private Time horaire;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     public Client client;
-    @JsonProperty("client")
+/*    @JsonProperty("client")
     public int get() {
         return client.getId();
-    }
-    @ManyToOne
+    }*/
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Entreprise entreprise;
- @JsonProperty("entreprise")
+ /*@JsonProperty("entreprise")
     public long geten(){
         return entreprise.getId();
-    }
+    }*/
     public Client getClient() {
         return  client;
     }
