@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.lang.Math.round;
+
 @CrossOrigin(origins = "http://localhost:4200")
 
 @RestController
@@ -43,7 +45,7 @@ private AvisRepository repository;
     {serviceAvis.delete(id);}
     @GetMapping("/countavis/{id}")
     public double count(@PathVariable long id){
-        return repository.testing(id);
+        return round (repository.testing(id));
     }
 
 }
