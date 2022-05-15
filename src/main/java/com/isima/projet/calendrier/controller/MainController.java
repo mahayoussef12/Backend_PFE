@@ -108,5 +108,8 @@ public class MainController {
     public List<countType>testcount(@PathVariable Long id ){
        return er.test(id);
            }
-
+    @GetMapping("api/v1/sumClient/{id}")
+    public List<countType>testcountclient(@PathVariable int id ){
+        return er.testclient(id);
+    }
 }

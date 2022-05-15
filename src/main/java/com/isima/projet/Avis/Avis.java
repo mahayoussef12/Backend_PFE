@@ -1,9 +1,12 @@
 package com.isima.projet.Avis;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isima.projet.Entreprise.Entreprise;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -21,10 +24,19 @@ public class Avis {
     private String prenom_auteur;
     private String email_auteur;
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-     Entreprise entreprise;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "EntrepriseId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
 
-
+    private Entreprise provider;
+    @JsonIgnore
+    public void setEntreprise(Entreprise provider) {
+        this.provider = provider;}
+    @JsonIgnore
+    public Entreprise getEntreprise() {
+        return provider;
+    }
 
   /*  @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, optional = false)

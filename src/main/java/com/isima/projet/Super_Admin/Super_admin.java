@@ -19,6 +19,7 @@ public class Super_admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_admin;
     private  String email;
+    private String name;
     @OneToMany(mappedBy = "super_admin",fetch = FetchType.LAZY)
     private List<RDV> rdv;
   /*  @OneToMany(mappedBy = "super_admin",fetch = FetchType.LAZY)

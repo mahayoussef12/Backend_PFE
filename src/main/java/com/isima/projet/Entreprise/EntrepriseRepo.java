@@ -17,6 +17,8 @@ public interface EntrepriseRepo extends JpaRepository<Entreprise, Long>{
 
    int countAllByCategorie(String categorie);
    int countAllByVille(String ville);
+
+
     // Entreprise findByNom(String nomSociete);
     
 }
