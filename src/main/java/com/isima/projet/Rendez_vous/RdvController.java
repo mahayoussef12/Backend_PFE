@@ -1,6 +1,8 @@
 package com.isima.projet.Rendez_vous;
 
 
+import com.isima.projet.Client.ClientRepository;
+import com.isima.projet.Entreprise.EntrepriseRepo;
 import com.isima.projet.calendrier.domain.Event;
 import com.isima.projet.calendrier.repository.EventRepository;
 import com.isima.projet.push.PushNotificationService;
@@ -27,6 +29,10 @@ public class RdvController {
     PushNotificationService pushNotificationService;
     @Autowired
     EventRepository er;
+    @Autowired
+    EntrepriseRepo repo1;
+    @Autowired
+    ClientRepository clientRepository;
     @GetMapping("/rdv")
     public List<RDV> getAllRDV() {
         return serviceRdv.getAll();
@@ -36,19 +42,25 @@ public class RdvController {
     public RDV getRDVById(@PathVariable Integer id) {
         return serviceRdv.getById(id);
     }
-    @PostMapping("/RDV/ajouter")
-    public  ResponseEntity<RDV> createRDV(@RequestBody RDV rdv) {
-        Event e = new Event();
-        e.setStart(rdv.getDate_rdv());
-        e.setEnd(rdv.getDate_rdv());
-        e.setText("Rendez_vous!");
-        er.save(e);
-        pushNotificationService.ajouter();
-        serviceRdv.save(rdv);
-        return new ResponseEntity<>(rdv, HttpStatus.OK);
+    @PostMapping("/RDV/ajouter/{EntrepriseId}")
+    public Optional<RDV> createRDV(@RequestBody RDV rdv, @PathVariable int EntrepriseId /*@PathVariable int ClientId*/ ) {
+       /* return  clientRepository.findById((int) Math.toIntExact(ClientId)).map(client -> {*/
+            return repo1.findById((long) Math.toIntExact(EntrepriseId)).map(entreprise -> {
+                rdv.setEntreprise(entreprise);
+                /*rdv.setClient(client);*/
+                Event e = new Event();
+                e.setStart(rdv.getDate_rdv());
+                e.setEnd(rdv.getDate_rdv());
+                e.setText("Rendez_vous!");
+                er.save(e);
+                pushNotificationService.ajouter();
+                return serviceRdv.save(rdv);
+            });
 
+
+      /*  });*/
     }
-    @PutMapping("/rdv/{id}")
+        @PutMapping("/rdv/{id}")
     Optional<RDV> replaceEmployee(@RequestBody RDV newrdv, @PathVariable int id) {
         pushNotificationService.update();
         return repository.findById(id)

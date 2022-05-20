@@ -6,6 +6,7 @@ import com.isima.projet.Super_Admin.Super_adminRepository;
 import com.isima.projet.push.PushNotificationService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -42,6 +43,7 @@ EntrepriseRepo repository;
     }
     @GetMapping("/entreprise/{id}")
     public Entreprise getEntrepriseById(@PathVariable long id) {
+
         return serviceEntreprise.getById(id);  }
    // @GetMapping("/entreprise/{nomSociete}")
    /* public Entreprise getEntrepriseByNom(@PathVariable String nomSociete) {
@@ -58,10 +60,10 @@ EntrepriseRepo repository;
     public  int CountGategorie(@PathVariable String categorie){return repository.countAllByCategorie(categorie); }
     @GetMapping("/countville/{ville}")
     public  int Countville(@PathVariable String ville){return repository.countAllByVille(ville); }
-    @PostMapping("verif/{id}")
+    @PostMapping(value="verif/{id}",produces = MediaType.ALL_VALUE)
     public String verif(@PathVariable Long id, @RequestBody Integer code ) {
         Entreprise entreprise = serviceEntreprise.getById(id);
-        if ((code.equals(entreprise.getTest()))&&LocalDateTime.now().isBefore(entreprise.getTime())){
+        if ((code.toString().equals(entreprise.getTest()))&&LocalDateTime.now().isBefore(entreprise.getTime())){
             SimpleMailMessage messa = new SimpleMailMessage();
             messa.setTo(entreprise.getEmail());
             messa.setSubject("Confirmation d'inscri");
@@ -75,7 +77,8 @@ EntrepriseRepo repository;
     }
 
     @PostMapping("/entreprise/ajouter")
-    public Entreprise createEntreprise(@RequestBody Entreprise entreprise)  {
+    public Entreprise createEntreprise(@RequestBody Entreprise entreprise )  {
+
 
         entreprise.setMdp(encoder.encode(entreprise.getMdp()));
 
@@ -92,7 +95,7 @@ EntrepriseRepo repository;
 //                            "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
 //                    .create();
 
-            SimpleMailMessage messa = new SimpleMailMessage();
+          SimpleMailMessage messa = new SimpleMailMessage();
             messa.setTo(entreprise.getEmail());
             messa.setSubject("Code");
             messa.setText(smsCode.getCode());
@@ -107,7 +110,7 @@ EntrepriseRepo repository;
     private Smscode createSMSCode() {
         //Introducing commons Lang package
         String code = RandomStringUtils.randomNumeric(5);
-        return new Smscode(code, 180);
+        return new Smscode(code, 1800);
     }
 
 

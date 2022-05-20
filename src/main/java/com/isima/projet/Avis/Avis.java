@@ -5,8 +5,6 @@ import com.isima.projet.Entreprise.Entreprise;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -27,7 +25,7 @@ public class Avis {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "EntrepriseId")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
 
     private Entreprise provider;
     @JsonIgnore
@@ -38,39 +36,4 @@ public class Avis {
         return provider;
     }
 
-  /*  @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "client_id", nullable = false, unique = true)
-    private Client client;
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "entreprise_id", nullable = false, unique = true)
-    private Entreprise entreprise;
-
-    public Entreprise getEntreprise() {
-        return entreprise;
-    }
-
-    public void setEntreprise(Entreprise entreprise) {
-        this.entreprise = entreprise;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }*/
- /*@JsonProperty("entreprise")
-  public Long getEntrepriseId() {
-      return entreprise.getId();
-  }
-    public Entreprise getEntreprise() {
-        return entreprise;
-    }
-
-    public void setEntreprise(Entreprise entreprise) {
-        this.entreprise = entreprise;
-    }*/
 }

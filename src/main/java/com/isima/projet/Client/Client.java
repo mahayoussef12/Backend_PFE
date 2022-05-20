@@ -56,4 +56,12 @@ public class Client {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private List <Event> event;
+
+	public User getUsers() {
+		return users;
+	}
+
+	public void setUsers(User users) {
+		this.users = users;
+	}
 }

@@ -39,11 +39,9 @@ public class Entreprise {
 	private String ville ;
 	private String adresse ;
 	private Date CreationEntreprise;
-	private String code;
 	private String test;
 	private LocalDateTime time;
-	//private String Jours;
-	//private  String heure;
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "entreprise",cascade = CascadeType.ALL)
 	private List<Event> events;
@@ -53,19 +51,12 @@ public class Entreprise {
 	@OneToMany(mappedBy = "entreprise",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
 @OnDelete(action = OnDeleteAction.CASCADE)
 	private  List<RDV>rdv;
-/*	@JsonIgnore
-	@OneToMany(mappedBy = "entreprise",cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private  List<Avis>avis;*/
+
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User users;
-	/*@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Facture facture;
-*/
+
 
 
 

@@ -1,5 +1,6 @@
 package com.isima.projet.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isima.projet.Client.Client;
 import com.isima.projet.Entreprise.Entreprise;
 import com.isima.projet.Super_Admin.Super_admin;
@@ -27,16 +28,35 @@ public  class User {
 
     @Column(name = "connected", nullable = false)
     private Boolean connected = false;
-
+    @JsonIgnore
     @ManyToOne
     private Super_admin super_admin;
-
+    @JsonIgnore
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Client client;
+    @JsonIgnore
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Entreprise entreprise;
+    @JsonIgnore
+    public void setEntreprise(Entreprise provider) {
+        this.entreprise = provider;}
+
+    public Client getClient() {
+        return client;
+    }
+    @JsonIgnore
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+      public Entreprise getEntreprise() {
+        return entreprise;
+    }
+
+
+
 }
 
 

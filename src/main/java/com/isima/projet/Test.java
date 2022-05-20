@@ -15,6 +15,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.security.SecureRandom;
+
 @EntityScan(
 		basePackageClasses = { Test.class, Jsr310JpaConverters.class }
 )
@@ -29,7 +31,18 @@ public class Test {
 	}
 	@Bean
 	public PasswordEncoder encoder() {
-		return new BCryptPasswordEncoder();
+		int strength=10;
+		return new BCryptPasswordEncoder(strength,new SecureRandom());
+
 	}
+	/*@Bean
+	PasswordEncoder passwordEncoder() {
+		Map<String, PasswordEncoder> encoders = new HashMap<>();
+		encoders.put("noop", NoOpPasswordEncoder.getInstance());
+		encoders.put("bcrypt", new BCryptPasswordEncoder());
+		encoders.put("MD5", new MessageDigestPasswordEncoder("MD5"));
+		return new DelegatingPasswordEncoder("bcrypt", encoders);
+	}*/
+
 
 }

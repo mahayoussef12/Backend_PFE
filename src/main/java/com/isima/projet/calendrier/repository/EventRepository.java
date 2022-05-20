@@ -24,4 +24,6 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 			( "select  new com.isima.projet.countType(count(u.client.id),u.end) from Event u where u.client.id=?1 group by u.end order by u.end")
 		/*(value = "SELECT e.start, COUNT(*) FROM Event e  GROUP BY e.start ",nativeQuery = true)*/
 	List<countType> testclient(int  id );
+	@Query
+			( "select  new com.isima.projet.countType(count(u.client.id),u.end) from Event u  group by u.end order by u.end")
 }

@@ -36,10 +36,8 @@ public class ServiceClient {
         Client client1 = repo.getById(id);
         return repo.save(client1);
     }
-  public List<Client> GetEmail(String email){
-      List<Client> clients = new ArrayList<Client>();
-      repo.findByEmail(email).forEach(clients1 -> clients.add(clients1));
-      return clients;
+  public Client GetEmail(String email){
+      return repo.findByEmail(email);
 
   }
 }

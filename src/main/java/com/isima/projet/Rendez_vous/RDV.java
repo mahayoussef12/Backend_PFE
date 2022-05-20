@@ -7,8 +7,6 @@ import com.isima.projet.Super_Admin.Super_admin;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,35 +22,26 @@ public class RDV {
     private LocalDateTime date_rdv;
    // private Time horaire;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
+
     @JsonIgnore
     public Client client;
 /*    @JsonProperty("client")
     public int get() {
         return client.getId();
     }*/
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
+
     @JsonIgnore
     private Entreprise entreprise;
  /*@JsonProperty("entreprise")
     public long geten(){
         return entreprise.getId();
     }*/
-    public Client getClient() {
-        return  client;
-    }
-    public void SetClient(Client client) {
-        this.client=client;
-    }
-    public Entreprise getEntreprise() {
-        return  entreprise;
-    }
-    public void SetEntreprise(Entreprise entreprise) {
-      this.entreprise=entreprise;
-    }
 
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
@@ -66,4 +55,9 @@ public class RDV {
     public void setSuper_admin(Super_admin super_admin) {
         this.super_admin = super_admin;
     }
+@JsonIgnore
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise=entreprise;
+    }
+
 }

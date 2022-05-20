@@ -10,8 +10,8 @@ public class FCMService_update {
 
     private String token="dG5G0Zdig5D8Gb-1z3xMIb:APA91bHORQbBZK0-hVxps78E8wW4gfk4T06GekaoaNh4oN0zd3R3NjTndAZPz5qu64RPogj706rmp_j_2FCwarO7H_feC1bPiRrkP_xFJIMsUION3yVBXxum3jLzUY3TQ7djuOPFLzv7";
 
-    private String title="Mise a jour les information";
-    private String message="vous etes mise a jour les informations ";
+    private String title="Mise a horaire les information";
+    private String message="vous etes mise a horaire les informations ";
     private String topic="";
 
 

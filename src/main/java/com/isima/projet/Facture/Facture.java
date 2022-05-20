@@ -5,8 +5,6 @@ import com.isima.projet.Entreprise.Entreprise;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -36,10 +34,10 @@ public class Facture {
     private String description ;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     private Client client;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     private Entreprise entreprise;
 
 
