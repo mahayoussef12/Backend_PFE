@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.isima.projet.calendrier.domain.Event;
 import com.isima.projet.calendrier.repository.EventRepository;
+import com.isima.projet.count;
 import com.isima.projet.countType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -111,5 +112,13 @@ public class MainController {
     @GetMapping("api/v1/sumClient/{id}")
     public List<countType>testcountclient(@PathVariable int id ){
         return er.testclient(id);
+    }
+    @GetMapping("api/v1/countClient")
+    public List<countType>sumAllclient(){
+        return er.testing();
+    }
+    @GetMapping("api/v1/countEntreprise")
+    public List<count>sumAllentreprise(){
+        return er.testingEntreprise();
     }
 }

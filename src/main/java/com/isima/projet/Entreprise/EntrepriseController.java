@@ -6,7 +6,6 @@ import com.isima.projet.Super_Admin.Super_adminRepository;
 import com.isima.projet.push.PushNotificationService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -60,10 +59,10 @@ EntrepriseRepo repository;
     public  int CountGategorie(@PathVariable String categorie){return repository.countAllByCategorie(categorie); }
     @GetMapping("/countville/{ville}")
     public  int Countville(@PathVariable String ville){return repository.countAllByVille(ville); }
-    @PostMapping(value="verif/{id}",produces = MediaType.ALL_VALUE)
-    public String verif(@PathVariable Long id, @RequestBody Integer code ) {
+    @PostMapping("verif/{id}")
+    public String verif(@PathVariable Long id, @RequestBody String code ) {
         Entreprise entreprise = serviceEntreprise.getById(id);
-        if ((code.toString().equals(entreprise.getTest()))&&LocalDateTime.now().isBefore(entreprise.getTime())){
+        if ((code.equals(entreprise.getTest()))&&(LocalDateTime.now().isBefore(entreprise.getTime()))){
             SimpleMailMessage messa = new SimpleMailMessage();
             messa.setTo(entreprise.getEmail());
             messa.setSubject("Confirmation d'inscri");

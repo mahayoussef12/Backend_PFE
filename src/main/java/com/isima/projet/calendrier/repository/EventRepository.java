@@ -1,6 +1,7 @@
 package com.isima.projet.calendrier.repository;
 
 import com.isima.projet.calendrier.domain.Event;
+import com.isima.projet.count;
 import com.isima.projet.countType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -24,6 +25,14 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 			( "select  new com.isima.projet.countType(count(u.client.id),u.end) from Event u where u.client.id=?1 group by u.end order by u.end")
 		/*(value = "SELECT e.start, COUNT(*) FROM Event e  GROUP BY e.start ",nativeQuery = true)*/
 	List<countType> testclient(int  id );
+		@Query
+				( "select  new com.isima.projet.countType(count(u.client.id),u.end) from Event u  group by u.end order by u.end")
+
+		List<countType> testing();
+
 	@Query
-			( "select  new com.isima.projet.countType(count(u.client.id),u.end) from Event u  group by u.end order by u.end")
+			( "select  new com.isima.projet.count(count(u.entreprise.id),u.end) from Event u  group by u.end order by u.end")
+
+	List<count> testingEntreprise();
+
 }
