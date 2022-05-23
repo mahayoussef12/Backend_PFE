@@ -13,9 +13,9 @@ public interface AvisRepository extends JpaRepository<Avis, Integer> {
 
    double testing(long id);
 
-    @Query("select a from Avis a where a.provider.id = ?1")
+    @Query("select a from Avis a where a.provider.id = ?1 and a.afficher=true")
    List <Avis> test(long id);
-    @Query("select count (a.provider.id) from Avis a where a.provider.id = ?1")
+    @Query("select count (a.provider.id) from Avis a where a.provider.id = ?1 and a.afficher=true")
     double count(long id);
 
 }

@@ -23,6 +23,8 @@ public class Avis {
     private String email_auteur;
     private String description;
     @JsonIgnore
+    private Boolean afficher;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "EntrepriseId")
 

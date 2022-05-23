@@ -1,10 +1,12 @@
 package com.isima.projet.Avis;
 
 import com.isima.projet.Entreprise.EntrepriseRepo;
+import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,6 +33,7 @@ private EntrepriseRepo repo;
                           @Valid @RequestBody Avis avis ) {
         return repo.findById((long) Math.toIntExact(EntrepriseId)).map(entreprise -> {
             avis.setEntreprise(entreprise);
+            avis.setAfficher(Boolean.valueOf("true"));
             return repository.save(avis);
         }).orElseThrow(() -> new IllegalArgumentException("EntrepriseId " + EntrepriseId + " not found"));
     }
@@ -48,10 +51,11 @@ private EntrepriseRepo repo;
     {
         return serviceAvis.getById(id);
     }
-  
+
     @DeleteMapping("/avis/{id}")
     private void deleteAvis(@PathVariable("id") Integer id)
     {serviceAvis.delete(id);}
+
    @GetMapping("/countavis/{id}")
     public double count(@PathVariable long id){
         return round (repository.testing(id));
@@ -63,6 +67,14 @@ private EntrepriseRepo repo;
     @GetMapping("/nbAvis/{id}")
     public double countAvisEntrepriseId (@PathVariable long id ){
         return  repository.count(id);
+    }
+    @PutMapping("/avis/modifier/{id}")
+    public ResponseEntity<Avis> update (@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+        Avis avis=repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+        avis.setAfficher(Boolean.valueOf("False"));
+        final Avis updatedEntreprise =repository.save(avis);
+        return ResponseEntity.ok(updatedEntreprise);
     }
 
 }
