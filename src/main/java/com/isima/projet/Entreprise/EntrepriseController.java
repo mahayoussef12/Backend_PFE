@@ -94,7 +94,7 @@ EntrepriseRepo repository;
 //                            "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
 //                    .create();
 
-          SimpleMailMessage messa = new SimpleMailMessage();
+         SimpleMailMessage messa = new SimpleMailMessage();
             messa.setTo(entreprise.getEmail());
             messa.setSubject("Code");
             messa.setText(smsCode.getCode());
