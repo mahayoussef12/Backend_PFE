@@ -18,6 +18,8 @@ public class horaire {
     private long id;
     private String opentime;
     private  String closeTime;
+    private String opentimemidi;
+    private String closetimemidi;
     private String Day;
     @JsonIgnore
      @ManyToOne

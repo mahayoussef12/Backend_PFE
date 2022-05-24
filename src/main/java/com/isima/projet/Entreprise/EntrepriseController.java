@@ -151,4 +151,5 @@ EntrepriseRepo repository;
         message.setText("je veux inscrire dans votre platforme  ");
         this.emailSender.send(message);
     }
+
 }

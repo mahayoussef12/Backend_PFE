@@ -11,6 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,4 +107,93 @@ public class RdvController {
         serviceRdv.delete(id);
 
     }
-  }
+    @GetMapping("/client/date/{EntrepriseId}")
+
+    public List getRdvDate(@PathVariable Long EntrepriseId) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
+
+        List<RDV> rdv = repository.findByEntrepriseId(EntrepriseId);
+        List<LocalDateTime> test = new ArrayList<>();
+
+        for (RDV value : rdv)  {
+            Date date2 = dateFormat.parse(String.valueOf(value.getDate_rdv()));
+            if (date1.equals(date2)) test.add(value.getDate_rdv());
+        }
+        return test;
+    }
+    @GetMapping("/client/client/{EntrepriseId}")
+
+    public List<String> getRdvclient(@PathVariable Long EntrepriseId) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
+
+        List<RDV> rdv = repository.findByEntrepriseId(EntrepriseId);
+        List<String> test = new ArrayList<>();
+        long diff = 0;
+        for (RDV value : rdv)  {
+            Date date2 = dateFormat.parse(String.valueOf(value.getDate_rdv()));
+            if (date1.equals(date2)){
+
+                test.add(value.getClient().getNom()+" "+value.getClient().getPrenom());
+            }
+        }
+        return test;
+    }
+    @GetMapping("/def/{EntrepriseId}")
+    public List defDate(@PathVariable long EntrepriseId) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
+
+        List<RDV> rdv = repository.findByEntrepriseId(EntrepriseId);
+        List<String> test = new ArrayList<>();
+
+        for (RDV value : rdv)  {
+            Date date2 = dateFormat.parse(String.valueOf(value.getDate_rdv()));
+            if (date1.equals(date2)){
+                Duration diff = (Duration.between(LocalDateTime.now(),value.getDate_rdv()));
+                String hms = String.format("%d:%1d:%1d",
+                        diff.toHours(),
+                        diff.toMinutesPart(),
+                        diff.toSecondsPart());
+
+
+                test.add(hms);
+            }
+        }
+        return test;
+    }
+    public Integer hours(LocalDateTime hou) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
+        Date date2 = dateFormat.parse(String.valueOf(LocalDate.parse(hou.toString())));
+        Integer  diff = Math.toIntExact((Duration.between((Temporal) date1, (Temporal) date2).toHours()));
+
+
+        return diff;
+
+    }
+    @GetMapping("/defmin/{EntrepriseId}")
+    public List defDatemin(@PathVariable long EntrepriseId) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
+
+        List<RDV> rdv = repository.findByEntrepriseId(EntrepriseId);
+        List<Integer> test = new ArrayList<>();
+
+        for (RDV value : rdv)  {
+            LocalDateTime date2 = (value.getDate_rdv());
+            if (date1.equals(date2)){
+                Integer hour= hours(date2);
+                Integer diff = 0;
+                long l = hour * 60;
+                diff = (int) Duration.between(LocalDateTime.now(),value.getDate_rdv()).toMinutes();
+                long min = l - diff;
+                test.add(diff);
+            }
+        }
+        return test;
+    }
+
+}
