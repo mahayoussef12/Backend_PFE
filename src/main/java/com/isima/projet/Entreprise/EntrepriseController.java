@@ -74,12 +74,20 @@ EntrepriseRepo repository;
             return"false";
         }
     }
+    @PostMapping("/entreprise/modifier/{id}")
+    public String update (@PathVariable(value = "id") long id,@RequestBody String mdp ) throws ResourceNotFoundException {
+       Entreprise avis=repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+        avis.setMdp(encoder.encode(String.valueOf(mdp)));
+        repository.save(avis);
+       return "true";
+    }  
 
     @PostMapping("/entreprise/ajouter")
     public Entreprise createEntreprise(@RequestBody Entreprise entreprise )  {
 
 
-        entreprise.setMdp(encoder.encode(entreprise.getMdp()));
+       entreprise.setMdp(encoder.encode(entreprise.getMdp()));
 
         Smscode smsCode = createSMSCode();
         {
@@ -133,7 +141,6 @@ EntrepriseRepo repository;
         employee.setAdresse(newen.getAdresse());
         employee.setImage(newen.getImage());
         employee.setMat_fiscale(newen.getMat_fiscale());
-
         final Entreprise updatedEmployee =serviceEntreprise.save(employee);
         return ResponseEntity.ok(updatedEmployee);
     }

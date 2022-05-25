@@ -20,19 +20,20 @@ public class RDV {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_RDV;
     private LocalDateTime date_rdv;
+    private  Boolean accepter;
    // private Time horaire;
 
     @ManyToOne
 
-    @JsonIgnore
+   /* @JsonIgnore*/
     public Client client;
 /*    @JsonProperty("client")
     public int get() {
         return client.getId();
     }*/
     @ManyToOne
-
-    @JsonIgnore
+/*
+    @JsonIgnore*/
     private Entreprise entreprise;
  /*@JsonProperty("entreprise")
     public long geten(){
@@ -59,5 +60,12 @@ public class RDV {
     public void setEntreprise(Entreprise entreprise) {
         this.entreprise=entreprise;
     }
+    @JsonIgnore
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
+    public Client getClient() {
+        return client;
+    }
 }

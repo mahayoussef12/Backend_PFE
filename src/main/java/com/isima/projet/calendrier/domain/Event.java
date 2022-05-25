@@ -52,6 +52,22 @@ public class Event {
 	@ManyToOne
 	private Client client;
 
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public Entreprise getEntreprise() {
+		return entreprise;
+	}
+
+	public void setEntreprise(Entreprise entreprise) {
+		this.entreprise = entreprise;
+	}
+
 	@ManyToOne
 	private Entreprise entreprise;
 	

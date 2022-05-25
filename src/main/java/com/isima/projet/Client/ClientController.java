@@ -25,9 +25,7 @@ import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.List;
 
-import static java.nio.file.Files.copy;
 import static java.nio.file.Paths.get;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -61,16 +59,18 @@ public JavaMailSender emailSender;
 	@GetMapping("/clientEmail/{email}")
 	public Client getAllEmail(@PathVariable String email){return  serviceClient.GetEmail(email);}
 
-	@PostMapping("/client/ajouter")
-	public Client createClient(@RequestBody Client client ) {
+	@PostMapping(value = "/client/ajouter",consumes = { "multipart/mixed" })
+	public String createClient(@RequestBody Client client,@RequestPart("files")MultipartFile multipartFiles ) throws IOException {
+		String fileName = StringUtils.cleanPath(multipartFiles.getOriginalFilename());
+			client.setImages(fileName);
 					SimpleMailMessage message = new SimpleMailMessage();
 					message.setTo(client.getEmail());
 					message.setSubject("Confirmation d'inscri");
 					message.setText("vous etes inscrie dans notre platform !! ");
 					this.emailSender.send(message);
 					client.setMdp(encoder.encode(client.getMdp()));
-					return serviceClient.save(client);
-
+					 serviceClient.save(client);
+				return"ajouter";
 
 		//sendSMS();
 //		return "Ajoutée avec succes !!";
@@ -136,8 +136,7 @@ Client client;
 		String filenames ;
 
 			String filename = StringUtils.cleanPath(multipartFiles.getOriginalFilename());
-			Path fileStorage = get(DIRECTORY, filename).toAbsolutePath().normalize();
-			copy(multipartFiles.getInputStream(), fileStorage, REPLACE_EXISTING);
+
 		filenames=filename;
 
 		return ResponseEntity.ok().body(filenames);
