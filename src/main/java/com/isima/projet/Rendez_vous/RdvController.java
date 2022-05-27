@@ -231,5 +231,14 @@ RDV rdv=repository.findById(id)
         }
         return test;
     }
-
+    @GetMapping("list/{EntrepriseId}")
+    public List test (@PathVariable long EntrepriseId){
+       List<LocalDateTime> test = new ArrayList<>();
+       List<RDV> RDV=repository.findByEntrepriseId(EntrepriseId);
+        for (RDV value : RDV){
+            LocalDateTime date = (value.getDate_rdv());
+            test.add(date);
+        }
+        return test;
+    }
 }

@@ -5,6 +5,7 @@ package com.isima.projet.User;
 import com.isima.projet.Client.ClientRepository;
 import com.isima.projet.Entreprise.EntrepriseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,6 +63,17 @@ private PasswordEncoder encoder;
         return  serviceUser.save(User);
 
     }*/
+ @PostMapping("/registration")
+ @ResponseStatus(code = HttpStatus.CREATED)
+ public void register(@RequestBody User userCredentialsDto) {
+    /*// User user =userCredentialsDto.Build()
+          //   .enabled(true)
+             .username(userCredentialsDto.getUsername())
+             .password(encoder.encode(userCredentialsDto.getMdp()))
+             .roles(Set.of("USER"))
+             .build();
+     userRepository.save(user);*/
+ }
 
 }
 

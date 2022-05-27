@@ -39,6 +39,10 @@ public  class User {
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Entreprise entreprise;
+
+    public User(User user) {
+    }
+
     @JsonIgnore
     public void setEntreprise(Entreprise provider) {
         this.entreprise = provider;}
