@@ -50,7 +50,7 @@ public class MainController {
         List<Event> events = er.findByEntrepriseId(entrepriseid);
         return events;
     }
-    @PostMapping("/api/events/create")
+  /*  @PostMapping("/api/events/create")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Transactional
     Event createEvent() {
@@ -67,7 +67,7 @@ public class MainController {
         er.save(e);
 
         return e;
-    }
+    }*/
     @PostMapping("/api/events/move")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Transactional

@@ -233,12 +233,13 @@ RDV rdv=repository.findById(id)
     }
     @GetMapping("list/{EntrepriseId}")
     public List test (@PathVariable long EntrepriseId){
-       List<LocalDateTime> test = new ArrayList<>();
+       List<String> test = new ArrayList<>();
        List<RDV> RDV=repository.findByEntrepriseId(EntrepriseId);
         for (RDV value : RDV){
-            LocalDateTime date = (value.getDate_rdv());
+            String date =value.getDate_rdv().toString();
             test.add(date);
         }
         return test;
     }
+
 }

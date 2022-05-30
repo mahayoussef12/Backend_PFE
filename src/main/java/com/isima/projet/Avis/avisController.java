@@ -33,7 +33,7 @@ private EntrepriseRepo repo;
                           @Valid @RequestBody Avis avis ) {
         return repo.findById((long) Math.toIntExact(EntrepriseId)).map(entreprise -> {
             avis.setEntreprise(entreprise);
-            avis.setAfficher(Boolean.valueOf("true"));
+            avis.setAfficher(Boolean.valueOf("False"));
             return repository.save(avis);
         }).orElseThrow(() -> new IllegalArgumentException("EntrepriseId " + EntrepriseId + " not found"));
     }
@@ -72,7 +72,7 @@ private EntrepriseRepo repo;
     public ResponseEntity<Avis> update (@PathVariable(value = "id") int id) throws ResourceNotFoundException {
         Avis avis=repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
-        avis.setAfficher(Boolean.valueOf("False"));
+        avis.setAfficher(Boolean.valueOf("True"));
         final Avis updatedEntreprise =repository.save(avis);
         return ResponseEntity.ok(updatedEntreprise);
     }

@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.File;
 import java.security.SecureRandom;
 
 @EntityScan(
@@ -26,7 +27,10 @@ import java.security.SecureRandom;
 @SecurityScheme(name = "pfe", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 @OpenAPIDefinition(info = @Info(title = "API", version = "2.0", description = "Projet Fin D'etude"))
 public class Test {
+	public static String uploadDirectory =
+			System.getProperty("user.dir")+"/src/main/resources/static/uploads";
 	public static void main(String[] args) {
+		new File(uploadDirectory).mkdir();
 		SpringApplication.run(Test.class, args);
 	}
 	@Bean

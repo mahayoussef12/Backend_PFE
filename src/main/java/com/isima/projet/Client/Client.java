@@ -12,7 +12,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -25,24 +24,24 @@ public class Client {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@NotNull
+
 	private String nom;
-	@NotNull
+
 	private String prenom;
-	@NotNull
+
 	private String tel;
-	@NotNull
+
 	private String adress;
-	@NotNull
+
 	private String genre;
-	@NotNull
+
 	private String pays;
-	@NotNull
+
 	private String ville;
-	@NotNull
+
 	private  String email;
-	@NotNull private String mdp;
-	@NotNull private String images;
+	 private String mdp;
+	 private String images;
 	/*@OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
 
 	private List<messagerie> messageries;*/
@@ -65,6 +64,7 @@ public class Client {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private List <Event> event;
+
 
 	public User getUsers() {
 		return users;
