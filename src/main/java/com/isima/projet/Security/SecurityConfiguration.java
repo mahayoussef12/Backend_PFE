@@ -1,5 +1,6 @@
 package com.isima.projet.Security;
 
+import com.isima.projet.User.implementation.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -7,11 +8,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.security.SecureRandom;
 
 @Configuration
 @EnableWebSecurity
@@ -31,28 +30,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     };
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-       authProvider.setPasswordEncoder(encoder());
-
-        return authProvider;
-    }
-
-    private PasswordEncoder encoder() {
-        int strength=10;
-        return new BCryptPasswordEncoder(strength,new SecureRandom());
-    }
 
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+
+
+
+
+/*    protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .and().csrf().disable()
                 .sessionManagement()
@@ -68,43 +53,46 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout().permitAll();
 
 
+    }*/
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new UserServiceImpl();
     }
 
 
-   /* @Override
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(encoder());
+
+        return authProvider;
+    }
+    @Bean
+    public PasswordEncoder encoder() {
+
+        return new BCryptPasswordEncoder();
+
+    }
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
+    }
 
-
-        auth
-                .inMemoryAuthentication()
-                .withUser("/")
-                .password(("/"))
-                .roles("/")
-                .and();
-    }*/
-
-   /* @Override
-    protected void configure(HttpSecurity http) throws Exception {
-       http
-                .cors().and().csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers(PUBLIC_ENDPOINTS).permitAll()
-                .antMatchers("/swagger-ui/**", "/pfe/**").permitAll()
-                .anyRequest().authenticated();
-
-    }*/
-
-
-/*
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
+        http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/swagger-ui/**", "/javainuse-openapi/**").permitAll()
+                .antMatchers("/api/**/**/**").hasRole("entreprise")
+                .antMatchers("/api/**/**/**").hasRole("client")
+                .antMatchers("/api/**/**/**").permitAll()
+                .antMatchers("/swagger-ui/**", "/pfe/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic();
-    }*/
+                .formLogin()
+                //.defaultSuccessUrl("/admin")
+                .and()
+                .logout().permitAll();
+    }
 }

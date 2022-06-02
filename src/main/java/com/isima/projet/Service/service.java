@@ -2,7 +2,6 @@ package com.isima.projet.Service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isima.projet.Entreprise.Entreprise;
-import com.isima.projet.Rendez_vous.RDV;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +26,7 @@ public class service {
 
     private Entreprise  entreprise;
 
-    @OneToOne
-    private RDV rdv;
+
 
     @JsonIgnore
     public Entreprise getEntreprise() {

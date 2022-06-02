@@ -17,15 +17,16 @@ import javax.persistence.*;
 @NoArgsConstructor @AllArgsConstructor
 @Getter
 @Setter
-public  class User {
+public  class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
   private  String email;
     private String mdp;
+  private String role;
     @Column(name = "username", unique = true)
     private String username;
-
+@JsonIgnore
     @Column(name = "connected", nullable = false)
     private Boolean connected = false;
     @JsonIgnore

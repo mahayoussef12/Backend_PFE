@@ -3,6 +3,7 @@ package com.isima.projet.Rendez_vous;
 
 import com.isima.projet.Client.ClientRepository;
 import com.isima.projet.Entreprise.EntrepriseRepo;
+import com.isima.projet.Service.ServiceRepository;
 import com.isima.projet.calendrier.domain.Event;
 import com.isima.projet.calendrier.repository.EventRepository;
 import com.isima.projet.push.PushNotificationService;
@@ -45,6 +46,8 @@ public class RdvController {
     EntrepriseRepo repo1;
     @Autowired
     ClientRepository clientRepository;
+    @Autowired
+    ServiceRepository serviceRepository;
     @GetMapping("/rdv")
     public List<RDV> getAllRDV() {
         return serviceRdv.getAll();
@@ -54,19 +57,22 @@ public class RdvController {
     public RDV getRDVById(@PathVariable Integer id) {
         return serviceRdv.getById(id);
     }
-    @PostMapping("/RDV/ajouter/{EntrepriseId}/{ClientId}")
+    @PostMapping("/RDV/create/{EntrepriseId}/{ClientId}/{ServiceId}")
 
-    public Optional<Optional<RDV>> createRDV(@RequestBody RDV rdv, @PathVariable int EntrepriseId , @PathVariable int ClientId ) {
+    public Optional<Optional<Optional<RDV>>> createRDV(@RequestBody RDV rdv, @PathVariable int EntrepriseId , @PathVariable int ClientId, @PathVariable int ServiceId ) {
         return  clientRepository.findById((int) Math.toIntExact(ClientId)).map(client -> {
-        return repo1.findById((long) Math.toIntExact(EntrepriseId)).map(entreprise -> {
-               rdv.setEntreprise(entreprise);
-                rdv.setClient(client);
-        rdv.setAccepter(Boolean.valueOf("false"));
+            return repo1.findById((long) Math.toIntExact(EntrepriseId)).map(entreprise -> {
+                return serviceRepository.findById(ServiceId).map(service -> {
+                    rdv.setService(service);
+                    rdv.setEntreprise(entreprise);
+                    rdv.setClient(client);
+                    rdv.setAccepter(Boolean.valueOf("false"));
 
-                return serviceRdv.save(rdv);
-           });
+                    return serviceRdv.save(rdv);
+                });
 
 
+            });
         });
     }
         @PutMapping("/rdv/{id}")

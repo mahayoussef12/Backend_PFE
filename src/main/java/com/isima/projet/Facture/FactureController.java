@@ -24,7 +24,7 @@ public class FactureController {
     @Autowired
     private ServiceFacture serviceFacture;
     @Autowired
-    private ServiceRepository repos;
+   ServiceRepository repos;
     @Autowired FactureRepository repo;
     private String tst()
     {

@@ -7,30 +7,34 @@ import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import com.isima.projet.User.UserRepository;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.SecureRandom;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 import static java.nio.file.Files.copy;
 import static java.nio.file.Paths.get;
@@ -56,8 +60,36 @@ public class ClientController {
     private PasswordEncoder encoder;
     @Autowired
     private UserRepository Repository;
+    @Autowired
+    ServletContext context;
+    @GetMapping ("/getAll")
+    public ResponseEntity<List<String>> getAll()
+    {
+        List<String> listArt = new ArrayList<String>();
+        String filesPath = context.getRealPath("/Images");
+        File filefolder = new File(filesPath);
+        for (File file : Objects.requireNonNull(filefolder.listFiles()))
+        {
+            if(!file.isDirectory())
+            {
+                String encodeBase64 = null;
+                try {
+                    String extension = FilenameUtils.getExtension(file.getName());
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    byte[] bytes = new byte[(int)file.length()];
+                    fileInputStream.read(bytes);
+                    encodeBase64 = Base64.getEncoder().encodeToString(bytes);
+                    listArt.add("data:image/"+extension+";base64,"+encodeBase64);
+                    fileInputStream.close();
 
 
+                }catch (Exception ignored){
+
+                }
+            }
+        }
+        return new ResponseEntity<>(listArt, HttpStatus.OK);
+    }
     @GetMapping("/client")
     public List<Client> getAllCliens() {
         return serviceClient.getAll();
@@ -65,6 +97,9 @@ public class ClientController {
 
     @GetMapping("/client/{id}")
     public Client getClientById(@PathVariable int id) {
+
+      
+
         return serviceClient.getById(id);
     }
 
@@ -85,20 +120,45 @@ public class ClientController {
             e.printStackTrace();
         }
         client.setImages(filename);*/
+        boolean isExit = new File(context.getRealPath("/Images/")).exists();
+        if (!isExit)
+        {
+            new File (context.getRealPath("/Images/")).mkdir();
+            System.out.println("mk dir.............");
+        }
         Client client1 = new ObjectMapper().readValue(client, Client.class);
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        /*String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         Path fileStorage = get(DIRECTORY, fileName).toAbsolutePath().normalize();
         copy(file.getInputStream(), fileStorage, REPLACE_EXISTING);
         String filename = file.getOriginalFilename();
-        client1.setImages(fileName);
-        SimpleMailMessage message = new SimpleMailMessage();
+        client1.setImages(fileName);*/
+        String filename = file.getOriginalFilename();
+        String newFileName = FilenameUtils.getBaseName(filename)+"."+FilenameUtils.getExtension(filename);
+        File serverFile = new File (context.getRealPath("/Images/"+File.separator+newFileName));
+        try
+        {
+            System.out.println("Image");
+            FileUtils.writeByteArrayToFile(serverFile,file.getBytes());
+
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
+       client1.setImages(newFileName);
+      /*  SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(client1.getEmail());
         message.setSubject("Confirmation d'inscri");
         message.setText("vous etes inscrie dans notre platform !! ");
-        this.emailSender.send(message);
+        this.emailSender.send(message);*/
         client1.setMdp(encoder.encode(client1.getMdp()));
        return  serviceClient.save(client1);
         //sendSMS();
+    }
+
+    @GetMapping(path="/Imgarticles/{id}")
+    public byte[] getPhoto(@PathVariable("id") int id) throws Exception{
+       Client Article   = repositoryclient.findById(id).get();
+        return Files.readAllBytes(Paths.get(context.getRealPath("/Images/")+Article.getImages()));
     }
 
         @PutMapping("/client/{id}")
@@ -126,15 +186,7 @@ public class ClientController {
             serviceClient.delete(id);
 
         }
-        @GetMapping("/manel/{cv}")
-        public String mdp (@PathVariable String cv){
-            int strength = 10; // work factor of bcrypt
-            BCryptPasswordEncoder bCryptPasswordEncoder =
-                    new BCryptPasswordEncoder(strength, new SecureRandom());
-            String encodedPassword;
-            return encodedPassword = bCryptPasswordEncoder.encode(cv);
 
-        }
         Client client;
         public Message sendSMS () {
             Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
@@ -184,42 +236,6 @@ public class ClientController {
             }
             return ResponseEntity.ok().body(filenames);
         }
-/*    @PostMapping("/add")
-    public Client uploadImage(
-            @RequestParam ("imageFile") MultipartFile file,
-            @RequestParam("images") String images,
-            @RequestParam ("nom") String nom,
-            @RequestParam("prenom") String prenom,
-            @RequestParam(" email") String email,
-            @RequestParam("mdp") String mdp,
-            @RequestParam("ville") String ville,
-            @RequestParam("pays") String pays ,
-            @RequestParam("genre") String genre,
-            @RequestParam("adress") String adress
-            )throws IOException {
 
-        String newImageName=getSaltString().concat(file.getOriginalFilename());
-        try {
-            Files.copy(file.getInputStream(), this.root.resolve(newImageName));
-        }catch (Exception e) {
-            throw new RuntimeException("could not store the file. Error: " +e.getMessage());
-        }
-        Client client = new Client(nom,prenom,email,pays,ville,adress,genre,mdp,newImageName);
-
-     serviceClient.save(client);
-        return client;
-    }*/
-    public static String getSaltString() {
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
-        while (salt.length() < 18) {
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            salt.append(SALTCHARS.charAt(index));
-        }/*from  w  w  w .ja v a2 s . c om*/
-        String saltStr = salt.toString();
-        return saltStr;
-
-    }
     }
 

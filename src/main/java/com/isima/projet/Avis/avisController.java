@@ -64,6 +64,11 @@ private EntrepriseRepo repo;
     public List<Avis> getEntrepriseId (@PathVariable long id ){
         return  repository.test(id);
     }
+    @GetMapping("/avisNonActiver/{id}")
+    public List<Avis> getEntrepriseIdNonActive (@PathVariable long id ){
+        return  repository.Non_Active(id);
+    }
+
     @GetMapping("/nbAvis/{id}")
     public double countAvisEntrepriseId (@PathVariable long id ){
         return  repository.count(id);

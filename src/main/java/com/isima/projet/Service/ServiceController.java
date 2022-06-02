@@ -46,10 +46,15 @@ public class ServiceController {
             ser1.setType(ser.getType());
             return repo.save(ser);
         }*/
-    @PutMapping("service/{id}")
-    public service updateService(@PathVariable Integer id, @RequestBody service ser) {
-        serviceservice.update(ser, id);
-        return ser;
+    @PutMapping("service/update/{id}")
+    public Optional<service> updateService(@PathVariable Integer id, @RequestBody service ser) {
+        return reposer.findById(id)
+                .map(employee -> {
+                    employee.setLib_service(ser.getLib_service());
+                    employee.setDescription(ser.getLib_service());
+                    employee.setPrix_unitaire_HT(ser.getPrix_unitaire_HT());
+                    return reposer.save(employee);
+                });
 
     }
 

@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/v1")
 @CrossOrigin(origins = "http://localhost:4200")
-public class UserController {
+public class UserController  {
   @Autowired
   private ServiceUser serviceUser;
   @Autowired
@@ -29,6 +29,7 @@ private PasswordEncoder encoder;
     @PostMapping("/user/test/{EntrepriseId}")
     public User createClient(@PathVariable (value = "EntrepriseId") Long EntrepriseId,@Valid @RequestBody User User) {
         return repo.findById((long) Math.toIntExact(EntrepriseId)).map(entreprise -> {
+            User.setRole("entreprise");
             User.setEntreprise(entreprise);
             User.setMdp(encoder.encode(User.getMdp()));
             return serviceUser.save(User);
@@ -40,8 +41,9 @@ private PasswordEncoder encoder;
     @PostMapping("/user/create/{ClientId}")
     public User create(@PathVariable (value = "ClientId") int ClientId,@Valid @RequestBody User User) {
         return clientRepository.findById(ClientId).map(client -> {
+            User.setRole("client");
             User.setClient(client);
-            User.setMdp(encoder.encode(User.getMdp()));
+           // User.setMdp(encoder.encode(User.getMdp()));
             return serviceUser.save(User);
         }).orElseThrow(() -> new IllegalArgumentException("EntrepriseId " + ClientId + " not found"));
 
@@ -53,8 +55,12 @@ private PasswordEncoder encoder;
         return userRepository.findByEmail(email);
     }
     @GetMapping("/user/maaha/{email}")
-    public String test (@PathVariable String email ){
+    public Long test (@PathVariable String email ){
         return userRepository.test(email);
+    }
+    @GetMapping("/user/entreprise/{email}")
+    public long en (@PathVariable String email ){
+        return userRepository.findtest(email);
     }
 
  /*   @PostMapping("/user/ajouter")
@@ -74,6 +80,5 @@ private PasswordEncoder encoder;
              .build();
      userRepository.save(user);*/
  }
-
 }
 

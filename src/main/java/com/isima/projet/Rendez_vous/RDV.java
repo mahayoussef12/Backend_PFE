@@ -68,4 +68,15 @@ public class RDV {
     public Client getClient() {
         return client;
     }
+    @JsonIgnore
+    public com.isima.projet.Service.service getService() {
+        return service;
+    }
+    @JsonIgnore
+    public void setService(com.isima.projet.Service.service service) {
+        this.service = service;
+    }
+
+    @OneToOne
+    public com.isima.projet.Service.service service;
 }
