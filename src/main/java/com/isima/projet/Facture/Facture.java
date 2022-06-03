@@ -1,7 +1,9 @@
 package com.isima.projet.Facture;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isima.projet.Client.Client;
 import com.isima.projet.Entreprise.Entreprise;
+import com.isima.projet.Rendez_vous.RDV;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,10 +38,38 @@ public class Facture {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 
     private Client client;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 
     private Entreprise entreprise;
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
+
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
+    }
+    @JsonIgnore
+    public RDV getRdv() {
+        return rdv;
+    }
+    @JsonIgnore
+    public void setRdv(RDV rdv) {
+        this.rdv = rdv;
+    }
+
+    @JsonIgnore
+@OneToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private RDV rdv;
 
  /*   @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "super_admin_id_admin")

@@ -4,6 +4,7 @@ import com.isima.projet.Entreprise.EntrepriseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -21,5 +22,9 @@ public class HoraireController {
             horaire.setEntreprise(entreprise);
             return repository.save(horaire);
         });
+    }
+    @GetMapping("horaire/{id}")
+    public List<horaire> gethoraie(@PathVariable long id){
+        return repository.findByEntrepriseId(id) ;
     }
 }

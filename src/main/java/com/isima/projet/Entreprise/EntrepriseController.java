@@ -74,6 +74,20 @@ EntrepriseRepo repository;
             return"false";
         }
     }
+    @GetMapping("/renvoi/code/{identreprise}")
+    public Entreprise renvoiCode(@PathVariable long identreprise){
+        Entreprise ent=serviceEntreprise.getById(identreprise);
+        Smscode smsCode = createSMSCode();
+        {
+            SimpleMailMessage messa = new SimpleMailMessage();
+            messa.setTo(ent.getEmail());
+            messa.setSubject("Code");
+            messa.setText(smsCode.getCode());
+            this.emailSender.send(messa);
+            ent.setTest(smsCode.getCode());
+            ent.setTime((LocalDateTime) smsCode.getExpireTime());
+            return serviceEntreprise.save(ent);
+        }}
     @PostMapping("/entreprise/modifier/{id}")
     public String update (@PathVariable(value = "id") long id,@RequestBody String mdp ) throws ResourceNotFoundException {
        Entreprise avis=repo.findById(id)
@@ -158,5 +172,4 @@ EntrepriseRepo repository;
         message.setText("je veux inscrire dans votre platforme  ");
         this.emailSender.send(message);
     }
-
 }

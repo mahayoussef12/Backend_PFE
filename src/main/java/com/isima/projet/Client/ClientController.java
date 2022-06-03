@@ -9,6 +9,7 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -151,6 +154,29 @@ public class ClientController {
         message.setText("vous etes inscrie dans notre platform !! ");
         this.emailSender.send(message);*/
         client1.setMdp(encoder.encode(client1.getMdp()));
+
+        Smscode smsCode = createSMSCode();
+        {
+
+//            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+//            String t="+216"+entreprise.getTel();
+//
+//
+//            Message message = Message.creator(
+//                            new PhoneNumber(t),//The phone number you are sending text to
+//                            new PhoneNumber("+12396030036"),//The Twilio phone number
+//                            "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
+//                    .create();
+
+            SimpleMailMessage messa = new SimpleMailMessage();
+            messa.setTo(client1.getEmail());
+            messa.setSubject("Code");
+            messa.setText(smsCode.getCode());
+            this.emailSender.send(messa);
+
+        }
+        client1.setTest(smsCode.getCode());
+        client1.setTime((LocalDateTime) smsCode.getExpireTime());
        return  serviceClient.save(client1);
         //sendSMS();
     }
@@ -236,6 +262,40 @@ public class ClientController {
             }
             return ResponseEntity.ok().body(filenames);
         }
+    @PostMapping("veriff/{id}")
+    public String veriff(@PathVariable int id, @RequestBody String code ) {
+        Client client = serviceClient.getById(id);
+        if ((code.equals(client.getTest()))&&(LocalDateTime.now().isBefore(client.getTime()))){
+            SimpleMailMessage messa = new SimpleMailMessage();
+            messa.setTo(client.getEmail());
+            messa.setSubject("Confirmation d'inscri");
+            messa.setText("vous etes inscrie dans notre platform !! ");
+            this.emailSender.send(messa);
+            return "true";
+        }
+        else{
+            return"false";
+        }
+    }
+    private Smscode createSMSCode() {
+        String code = RandomStringUtils.randomNumeric(5);
+        return new Smscode(code, 1800);
+    }
+    @GetMapping("/renvoi/{idclient}")
+    public Client renvoiCode(@PathVariable int idclient){
+        Client ent=serviceClient.getById(idclient);
+        Smscode smsCode = createSMSCode();
+        {
+            SimpleMailMessage messa = new SimpleMailMessage();
+            messa.setTo(ent.getEmail());
+            messa.setSubject("Code");
+            messa.setText(smsCode.getCode());
+            this.emailSender.send(messa);
+            ent.setTest(smsCode.getCode());
+            ent.setTime((LocalDateTime) smsCode.getExpireTime());
+            return serviceClient.save(ent);
 
+
+        }}
     }
 

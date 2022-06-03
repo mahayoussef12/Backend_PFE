@@ -12,6 +12,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -42,6 +43,8 @@ public class Client {
 	private  String email;
 	 private String mdp;
 	 private String images;
+	private String test;
+	private LocalDateTime time;
 	/*@OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
 
 	private List<messagerie> messageries;*/

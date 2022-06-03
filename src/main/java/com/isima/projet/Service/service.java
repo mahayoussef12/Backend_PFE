@@ -22,6 +22,8 @@ public class service {
     private String description ;
     private float prix_unitaire_HT;
     private  String type;
+    @JsonIgnore
+    private Boolean afficher;
     @ManyToOne
 
     private Entreprise  entreprise;

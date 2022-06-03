@@ -56,11 +56,11 @@ public class RDV {
     public void setSuper_admin(Super_admin super_admin) {
         this.super_admin = super_admin;
     }
-@JsonIgnore
+
     public void setEntreprise(Entreprise entreprise) {
         this.entreprise=entreprise;
     }
-    @JsonIgnore
+
     public void setClient(Client client) {
         this.client = client;
     }
@@ -68,11 +68,11 @@ public class RDV {
     public Client getClient() {
         return client;
     }
-    @JsonIgnore
+
     public com.isima.projet.Service.service getService() {
         return service;
     }
-    @JsonIgnore
+
     public void setService(com.isima.projet.Service.service service) {
         this.service = service;
     }

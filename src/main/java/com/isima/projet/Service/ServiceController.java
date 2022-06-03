@@ -1,7 +1,9 @@
 package com.isima.projet.Service;
 
 import com.isima.projet.Entreprise.EntrepriseRepo;
+import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +35,7 @@ public class ServiceController {
     @PostMapping("/ajouter")
 
     public service createService(@RequestBody service ser) {
+
         return serviceservice.save(ser);
     }
 
@@ -58,7 +61,6 @@ public class ServiceController {
 
     }
 
-
     @DeleteMapping("/service/delete/{id}")
     public void deleteService(@PathVariable Integer id) {
         serviceservice.delete(id);
@@ -69,16 +71,38 @@ public class ServiceController {
     @PostMapping("service/save/{EntrepriseId}")
     private Optional<service> ajouterservice(@RequestBody service ser, @PathVariable int EntrepriseId) {
         return repo1.findById((long) Math.toIntExact(EntrepriseId)).map(entreprise -> {
+            ser.setAfficher(Boolean.valueOf("true"));
             ser.setEntreprise(entreprise);
             return reposer.save(ser);
         });
     }
 
+    @PutMapping("service/desactiver/{id}")
+    public ResponseEntity<service> desactiver(@PathVariable Integer id) throws ResourceNotFoundException {
+     service avis=reposer.findById(id)
+             .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+        avis.setAfficher(Boolean.valueOf("False"));
+        final service updatedEntreprise =reposer.save(avis);
+        return ResponseEntity.ok(updatedEntreprise);
 
+    }
 
+    @PutMapping("service/Activer/{id}")
+    public ResponseEntity<service> Activee(@PathVariable Integer id) throws ResourceNotFoundException {
+        service avis=reposer.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+        avis.setAfficher(Boolean.valueOf("True"));
+        final service updatedEntreprise =reposer.save(avis);
+        return ResponseEntity.ok(updatedEntreprise);
+
+    }
 
     @GetMapping("/servise/entreprise/{id}")
     public List<service> listService(@PathVariable long id) {
         return repo.findByEntrepriseId(id);
+    }
+    @GetMapping("/service/entreprise/desactive/{id}")
+    public List<service> listServicedesactivee(@PathVariable long id) {
+        return repo.findByEntrepriseIddsc(id);
     }
 }

@@ -2,8 +2,9 @@ package com.isima.projet.Facture;
 
 import com.github.royken.converter.FrenchNumberToWords;
 import com.google.zxing.WriterException;
+import com.isima.projet.Rendez_vous.RDVRepository;
+import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import com.isima.projet.Service.ServiceRepository;
-import com.isima.projet.Service.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +16,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import static com.isima.projet.Facture.status.la_facture_non_payee;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -24,8 +28,10 @@ public class FactureController {
     @Autowired
     private ServiceFacture serviceFacture;
     @Autowired
-   ServiceRepository repos;
+    private ServiceRepository repos;
     @Autowired FactureRepository repo;
+    @Autowired
+    RDVRepository rdvRepository;
     private String tst()
     {
         Date date = new Date();
@@ -36,35 +42,30 @@ public class FactureController {
         return   Integer.toHexString((int) date.getTime())+"_"+currentYear;
 
     }
-    @PostMapping("/ajouter/fac")
-    private Facture createfac(@RequestBody Facture fac) throws IOException, WriterException {
+    @PostMapping("/ajouter/fac/{id}")
+    private Optional<Facture> createfac(@PathVariable long id ) throws IOException, WriterException {
+        Facture fac=new Facture();
+        return rdvRepository.findById((int) id).map(entreprise -> {
+               fac.setRdv(entreprise);
+                fac.setPrix_unitaire_HT(fac.getRdv().getService().getPrix_unitaire_HT());
+                fac.setTva(19);
+                fac.setEtat(la_facture_non_payee);
+                fac.setQuantite(1);
+                fac.setRemise(5);
+                fac.setDescription(fac.getRdv().getService().getDescription());
+                fac.setDate_creation(LocalDate.now());
+                fac.setTotal_Ht(fac.getRdv().getService().getPrix_unitaire_HT() * fac.getQuantite());
+                float x = (float) ((fac.getTotal_Ht() * (fac.getTva() / 100)) + fac.getTotal_Ht());
+                float a = x - ((x * fac.getRemise()) / 100);
+                fac.setTolale_TTC(a);
+                fac.setEntreprise(entreprise.getEntreprise());
+                fac.setClient(entreprise.getClient());
+                Date date = new Date();
+                String ss = "CODY00";
+                fac.setNum_facture(ss + (countFacture() + 1));
+            return serviceFacture.save(fac);
 
-        byte[] image = new byte[0];
-        List<service> serv = repos.findAll();
-
-        for (int i = 0; i < serv.size(); i++) {
-            fac.setPrix_unitaire_HT(serv.get(i).getPrix_unitaire_HT());
-            fac.setTva(19);
-            fac.setDescription(serv.get(i).getDescription());
-
-            fac.setDate_creation(LocalDate.now());
-
-            fac.setTotal_Ht(serv.get(i).getPrix_unitaire_HT()*fac.getQuantite());
-            float x = (float) ((fac.getTotal_Ht() * (fac.getTva() / 100)) + fac.getTotal_Ht());
-            float a = x - ((x * fac.getRemise()) / 100);
-            fac.setTolale_TTC(a);
-            Date date = new Date();
-            SimpleDateFormat getYearFormat = new SimpleDateFormat("yyyy");
-            String currentYear = getYearFormat.format(date);
-            date.getTime();
-            String ss=tst();
-            fac.setNum_facture(ss);
-
-
-        }
-
-        serviceFacture.save(fac);
-        return fac;
+        });
     }
 
 
@@ -91,6 +92,10 @@ public class FactureController {
                 + FrenchNumberToWords.convert(decimal);
         return resultat;
     }
+    @GetMapping(value = "/size")
+    public int countFacture() {
+        return serviceFacture.getAll().size();
+    }
     @GetMapping("/factures")
     public List<Facture> getAllFacture() {
         return serviceFacture.getAll();
@@ -110,6 +115,16 @@ public class FactureController {
     @GetMapping("/facture/{id}")
     public Facture getClientById(@PathVariable long id) {
         return serviceFacture.getById(id);
+    }
+    @PutMapping("/status/{id}")
+    public ResponseEntity<Facture> updateStatus(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+        Facture employee = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+
+        employee.setEtat(status.valueOf("la_facture_payee"));
+
+        final Facture updatedEmployee =repo.save(employee);
+        return ResponseEntity.ok(updatedEmployee);
     }
 
 
