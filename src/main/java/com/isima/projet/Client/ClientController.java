@@ -148,11 +148,11 @@ public class ClientController {
         }
 
        client1.setImages(newFileName);
-      /*  SimpleMailMessage message = new SimpleMailMessage();
+        SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(client1.getEmail());
         message.setSubject("Confirmation d'inscri");
         message.setText("vous etes inscrie dans notre platform !! ");
-        this.emailSender.send(message);*/
+        this.emailSender.send(message);
         client1.setMdp(encoder.encode(client1.getMdp()));
 
         Smscode smsCode = createSMSCode();
@@ -186,8 +186,16 @@ public class ClientController {
        Client Article   = repositoryclient.findById(id).get();
         return Files.readAllBytes(Paths.get(context.getRealPath("/Images/")+Article.getImages()));
     }
+    @PostMapping("/client/modifier/{id}")
+    public String update (@PathVariable(value = "id") long id,@RequestBody String mdp ) throws ResourceNotFoundException {
+       Client avis=repositoryclient.findById((int) id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+        avis.setMdp(encoder.encode(String.valueOf(mdp)));
+        repositoryclient.save(avis);
+        return "true";
+    }
 
-        @PutMapping("/client/{id}")
+    @PutMapping("/client/{id}")
         public ResponseEntity<Client> updateClient ( @PathVariable(value = "id") int id,
         @RequestBody Client client1) throws ResourceNotFoundException {
             Client client = repositoryclient.findById(id)

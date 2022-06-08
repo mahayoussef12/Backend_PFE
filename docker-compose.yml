@@ -1,31 +1,3 @@
-
-#version: "3"
-#services:
-#  mysqldb:
-#    container_name: mysqldb
-#    image: mysql:8
-#    networks:
-#      - spring-mysql
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=root
-#      - MYSQL_DATABASE=project
-#    restart: unless-stopped
-#  # APP*****************************************
-#  springbootapp:
-#    image: springbootapp:latest
-#
-#    container_name: springbootapp
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - spring-mysql
-#    depends_on:
-#      - mysqldb
-#    links:
-#      - mysqldb
-#
-#networks:
-#  spring-mysql:
 version: '3'
 services:
   mysql-standalone:
@@ -41,7 +13,7 @@ services:
   springboot-docker:
     image: springboot-docker
     ports:
-      - "8084:8084"
+      - "8082:8082"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-standalone:3306/project?autoReconnect=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: "root"
@@ -49,5 +21,4 @@ services:
 
     depends_on:
       - mysql-standalone
-
 
