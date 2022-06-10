@@ -81,6 +81,13 @@ private EntrepriseRepo repo;
         final Avis updatedEntreprise =repository.save(avis);
         return ResponseEntity.ok(updatedEntreprise);
     }
-
+    @PutMapping("/avis/desactiver/{id}")
+    public ResponseEntity<Avis> updateDesactive (@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+        Avis avis=repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+        avis.setAfficher(Boolean.valueOf("False"));
+        final Avis updatedEntreprise =repository.save(avis);
+        return ResponseEntity.ok(updatedEntreprise);
+    }
 }
 

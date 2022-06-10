@@ -8,9 +8,11 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 
 import java.io.File;
 
@@ -43,6 +45,11 @@ public class Test {
 		encoders.put("MD5", new MessageDigestPasswordEncoder("MD5"));
 		return new DelegatingPasswordEncoder("bcrypt", encoders);
 	}*/
+@Bean
+	public MessageDigestPasswordEncoder code() {
+		
+		return new MessageDigestPasswordEncoder("MD5");
 
+	}
 
 }
