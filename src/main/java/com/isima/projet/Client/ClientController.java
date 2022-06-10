@@ -7,14 +7,11 @@ import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import com.isima.projet.User.UserRepository;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -26,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,7 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,7 +43,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 @RestController
 @RequestMapping("/api/v1")
 public class ClientController {
-    public static final String DIRECTORY = System.getProperty("user.home") + "/Downloads/uploads/";
+    public static final String DIRECTORY = "C:/Users/HP/Desktop/pfe/src/assets/img/";
     @Autowired
     private ServiceClient serviceClient;
     @Autowired
@@ -65,34 +59,7 @@ public class ClientController {
     private UserRepository Repository;
     @Autowired
     ServletContext context;
-    @GetMapping ("/getAll")
-    public ResponseEntity<List<String>> getAll()
-    {
-        List<String> listArt = new ArrayList<String>();
-        String filesPath = context.getRealPath("/Images");
-        File filefolder = new File(filesPath);
-        for (File file : Objects.requireNonNull(filefolder.listFiles()))
-        {
-            if(!file.isDirectory())
-            {
-                String encodeBase64 = null;
-                try {
-                    String extension = FilenameUtils.getExtension(file.getName());
-                    FileInputStream fileInputStream = new FileInputStream(file);
-                    byte[] bytes = new byte[(int)file.length()];
-                    fileInputStream.read(bytes);
-                    encodeBase64 = Base64.getEncoder().encodeToString(bytes);
-                    listArt.add("data:image/"+extension+";base64,"+encodeBase64);
-                    fileInputStream.close();
 
-
-                }catch (Exception ignored){
-
-                }
-            }
-        }
-        return new ResponseEntity<>(listArt, HttpStatus.OK);
-    }
     @GetMapping("/client")
     public List<Client> getAllCliens() {
         return serviceClient.getAll();
@@ -114,40 +81,13 @@ public class ClientController {
     @PostMapping(value = "/client/ajouter",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
     public Client createClient( @RequestParam("client") String client,@RequestParam("file") MultipartFile file) throws JsonParseException, JsonMappingException, Exception {
-      /*  StringBuilder fileNames = new StringBuilder();
-        String filename=client.getId() + file.getOriginalFilename().substring(file.getOriginalFilename().length()-4);
-        Path fileNameAndPath = Paths.get( DIRECTORY ,filename);
-        try {
-            Files.write(fileNameAndPath, file.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        client.setImages(filename);*/
-        boolean isExit = new File(context.getRealPath("/Images/")).exists();
-        if (!isExit)
-        {
-            new File (context.getRealPath("/Images/")).mkdir();
-            System.out.println("mk dir.............");
-        }
+
         Client client1 = new ObjectMapper().readValue(client, Client.class);
-        /*String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         Path fileStorage = get(DIRECTORY, fileName).toAbsolutePath().normalize();
         copy(file.getInputStream(), fileStorage, REPLACE_EXISTING);
         String filename = file.getOriginalFilename();
-        client1.setImages(fileName);*/
-        String filename = file.getOriginalFilename();
-        String newFileName = FilenameUtils.getBaseName(filename)+"."+FilenameUtils.getExtension(filename);
-        File serverFile = new File (context.getRealPath("/Images/"+File.separator+newFileName));
-        try
-        {
-            System.out.println("Image");
-            FileUtils.writeByteArrayToFile(serverFile,file.getBytes());
-
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-
-       client1.setImages(newFileName);
+        client1.setImages(fileName);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(client1.getEmail());
         message.setSubject("Confirmation d'inscri");

@@ -4,8 +4,10 @@ package com.isima.projet.User;
 
 import com.isima.projet.Client.ClientRepository;
 import com.isima.projet.Entreprise.EntrepriseRepo;
+import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +51,22 @@ private PasswordEncoder encoder;
 
 
 
+    }
+    @PutMapping("/user/modifier/{id}")
+    public ResponseEntity<User> update (@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+        User avis=userRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+        avis.setConnected(Boolean.valueOf("True"));
+        final User updatedEntreprise =userRepository.save(avis);
+        return ResponseEntity.ok(updatedEntreprise);
+    }
+    @PutMapping("/user/update/{id}")
+    public ResponseEntity<User> updateuser (@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+        User avis=userRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+        avis.setConnected(Boolean.valueOf("False"));
+        final User updatedEntreprise =userRepository.save(avis);
+        return ResponseEntity.ok(updatedEntreprise);
     }
     @GetMapping("/user/maha/{email}")
     public User testing (@PathVariable String email ){

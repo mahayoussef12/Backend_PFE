@@ -1,19 +1,30 @@
 package com.isima.projet.Entreprise;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import com.isima.projet.Super_Admin.Super_admin;
 import com.isima.projet.Super_Admin.Super_adminRepository;
 import com.isima.projet.push.PushNotificationService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+
+import static java.nio.file.Files.copy;
+import static java.nio.file.Paths.get;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -33,7 +44,7 @@ public class EntrepriseController {
     PushNotificationService pushNotificationService;
 @Autowired
 EntrepriseRepo repository;
-    private static final String QR_CODE_IMAGE_PATH = "./src/main/resources/QRCode.png";
+
     private com.isima.projet.Entreprise.Entreprise Entreprise;
     private String success;
     @GetMapping("/entreprise")
@@ -95,17 +106,22 @@ EntrepriseRepo repository;
         avis.setMdp(encoder.encode(String.valueOf(mdp)));
         repository.save(avis);
        return "true";
-    }  
+    }
+    public static final String DIRECTORY = "C:/Users/HP/Desktop/pfe/src/assets/img/";
+    @PostMapping(value ="/entreprise/ajouter",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
-    @PostMapping("/entreprise/ajouter")
-    public Entreprise createEntreprise(@RequestBody Entreprise entreprise )  {
+    public Entreprise createEntreprise(@RequestParam("entreprise") String entreprise,@RequestParam("file") MultipartFile file) throws IOException {
+      Entreprise entreprise1 = new ObjectMapper().readValue(entreprise, Entreprise.class);
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        Path fileStorage = get(DIRECTORY, fileName).toAbsolutePath().normalize();
+        copy(file.getInputStream(), fileStorage, REPLACE_EXISTING);
+        String filename = file.getOriginalFilename();
+        entreprise1.setImage(fileName);
 
-
-       entreprise.setMdp(encoder.encode(entreprise.getMdp()));
+       entreprise1.setMdp(encoder.encode(entreprise1.getMdp()));
 
         Smscode smsCode = createSMSCode();
         {
-
 //            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
 //            String t="+216"+entreprise.getTel();
 //
@@ -116,16 +132,16 @@ EntrepriseRepo repository;
 //                            "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
 //                    .create();
 
-       /*  SimpleMailMessage messa = new SimpleMailMessage();
-            messa.setTo(entreprise.getEmail());
+        SimpleMailMessage messa = new SimpleMailMessage();
+            messa.setTo(entreprise1.getEmail());
             messa.setSubject("Code");
             messa.setText(smsCode.getCode());
-            this.emailSender.send(messa);*/
+            this.emailSender.send(messa);
 
         }
-        entreprise.setTest(smsCode.getCode());
-        entreprise.setTime((LocalDateTime) smsCode.getExpireTime());
-        return serviceEntreprise.save(entreprise);
+        entreprise1.setTest(smsCode.getCode());
+        entreprise1.setTime((LocalDateTime) smsCode.getExpireTime());
+        return serviceEntreprise.save(entreprise1);
 
     }
     private Smscode createSMSCode() {
