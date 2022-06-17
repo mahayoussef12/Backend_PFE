@@ -8,8 +8,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class FCMServiceAjout_RDV {
 
-    private String token="dG5G0Zdig5D8Gb-1z3xMIb:APA91bHORQbBZK0-hVxps78E8wW4gfk4T06GekaoaNh4oN0zd3R3NjTndAZPz5qu64RPogj706rmp_j_2FCwarO7H_feC1bPiRrkP_xFJIMsUION3yVBXxum3jLzUY3TQ7djuOPFLzv7";
-    private String title="Prise un rendez_vous";
+    private String token="dG5G0Zdig5D8Gb-1z3xMIb:APA91bHORQbBZK0-hVxps78E8wW4gfk4T06GekaoaNh4oN0zd3R3NjTndAZPz5qu64RPogj706rmp_j_2FCwarO7H_feC1bPiRrkP_xFJIMsUION3yVBXxum3jLzUY3TQ7djuOPFLzv7";    private String title="Prise un rendez_vous";
     private String message="l'ajoute de rendez vous fait avec success ";
     private String topic="";
 

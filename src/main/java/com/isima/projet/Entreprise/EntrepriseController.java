@@ -5,6 +5,10 @@ import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import com.isima.projet.Super_Admin.Super_admin;
 import com.isima.projet.Super_Admin.Super_adminRepository;
 import com.isima.projet.push.PushNotificationService;
+import com.isima.projet.villedynamique;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,8 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import static java.nio.file.Files.copy;
 import static java.nio.file.Paths.get;
@@ -44,7 +50,8 @@ public class EntrepriseController {
     PushNotificationService pushNotificationService;
 @Autowired
 EntrepriseRepo repository;
-
+    public static final String ACCOUNT_SID = "AC30d125e7034600076cc44a3c286a0f19";
+    public static final String AUTH_TOKEN = "5b3dfa49062cc4b736639b1a6e115bb5";
     private com.isima.projet.Entreprise.Entreprise Entreprise;
     private String success;
     @GetMapping("/entreprise")
@@ -122,15 +129,15 @@ EntrepriseRepo repository;
 
         Smscode smsCode = createSMSCode();
         {
-//            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-//            String t="+216"+entreprise.getTel();
-//
-//
-//            Message message = Message.creator(
-//                            new PhoneNumber(t),//The phone number you are sending text to
-//                            new PhoneNumber("+12396030036"),//The Twilio phone number
-//                            "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
-//                    .create();
+            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+            String t="+216"+entreprise1.getTel();
+
+
+            Message message = Message.creator(
+                            new PhoneNumber(t),//The phone number you are sending text to
+                            new PhoneNumber("+12342064232"),//The Twilio phone number
+                            "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
+                    .create();
 
         SimpleMailMessage messa = new SimpleMailMessage();
             messa.setTo(entreprise1.getEmail());
@@ -187,5 +194,156 @@ EntrepriseRepo repository;
         message.setSubject("demande d'inscription");
         message.setText("je veux inscrire dans votre platforme  ");
         this.emailSender.send(message);
+    }
+    @GetMapping("/testrandem")
+    public List testlist()
+    {
+        List<Integer> list = new ArrayList<>();
+
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
+        list.add(6);
+        list.add(7);
+        list.add(8);
+        list.add(9);
+        list.add(10);
+        list.add(11);
+        list.add(12);
+        list.add(13);
+        list.add(14);
+        list.add(15);
+        list.add(16);
+        list.add(17);
+        list.add(18);
+        list.add(19);
+        list.add(20);
+        list.add(22);
+        list.add(21);
+        list.add(23);
+        list.add(24);
+        List<Integer> listrandem = new ArrayList<>();
+
+        // boundIndex for select in sub list
+        Random randomizer = new Random();
+        Integer random1 = list.get(randomizer.nextInt(list.size()));
+        Integer random2 = list.get(randomizer.nextInt(list.size()));
+        Integer random3 = list.get(randomizer.nextInt(list.size()));
+        Integer random4= list.get(randomizer.nextInt(list.size()));
+        Integer random5 = list.get(randomizer.nextInt(list.size()));
+        Integer random6= list.get(randomizer.nextInt(list.size()));
+        listrandem.add(random1);
+        listrandem.add(random2);
+        listrandem.add(random3);
+        listrandem.add(random4);
+        listrandem.add(random5);
+        listrandem.add(random6);
+        List<villedynamique> listVille = new ArrayList<>();
+        villedynamique object1 = new villedynamique();
+        villedynamique object2 = new villedynamique();
+        villedynamique object3 = new villedynamique();
+        villedynamique object4 = new villedynamique();
+        villedynamique object5 = new villedynamique();
+        villedynamique object6 = new villedynamique();
+        villedynamique object7 = new villedynamique();
+        villedynamique object8 = new villedynamique();
+        villedynamique object9 = new villedynamique();
+        villedynamique object10 = new villedynamique();
+        villedynamique object11 = new villedynamique();
+        villedynamique object12 = new villedynamique();
+        villedynamique object13 = new villedynamique();
+        villedynamique object14 = new villedynamique();
+        villedynamique object15 = new villedynamique();
+        villedynamique object16 = new villedynamique();
+        villedynamique object17 = new villedynamique();
+        villedynamique object18 = new villedynamique();
+        villedynamique object19 = new villedynamique();
+        villedynamique object20= new villedynamique();
+        villedynamique object24= new villedynamique();
+        villedynamique object23 = new villedynamique();
+        villedynamique object22 = new villedynamique();
+        villedynamique object21= new villedynamique();
+        object1.setNomVille("kef");
+        object1.setPhoto("assets/le-kef.jpg");
+        object2.setNomVille("manouba");
+        object2.setPhoto("assets/Manouba.jpg");
+        object3.setNomVille("tozeur");
+        object3.setPhoto("assets/tozeur.jpg");
+        object4.setNomVille("mahdia");
+        object4.setPhoto("assets/mahdia.jpg");
+        object5.setNomVille("bizerte");
+        object5.setPhoto("assets/bizert.jpg");
+        object6.setNomVille("zaghouan");
+        object6.setPhoto("assets/zaghouan.jpg");
+        object7.setNomVille("ariana");
+        object7.setPhoto("assets/ariana.jpg");
+        object8.setNomVille("ban arous");
+        object8.setPhoto("assets/ben-arous.jpg");
+        object9.setNomVille("tunis");
+        object9.setPhoto("assets/tunis.jpg");
+        object10.setNomVille("gabes");
+        object10.setPhoto("assets/gabes.jpg");
+        object11.setNomVille("sousse");
+        object11.setPhoto("assets/sousse.jpg");
+        object12.setNomVille("nabeul");
+        object12.setPhoto("assets/nabeul.jpg");
+        object13.setNomVille("monastir");
+        object13.setPhoto("assets/monastir.jpg");
+        object14.setNomVille("tataouine");
+        object14.setPhoto("assets/tataouine.jpg");
+        object15.setNomVille("jendouba");
+        object15.setPhoto("assets/jendouba.jpg");
+        object16.setNomVille("béja");
+        object16.setPhoto("assets/beja.jpg");
+        object17.setNomVille("siliana");
+        object17.setPhoto("assets/siliana.jpg");
+        object18.setNomVille("sfax");
+        object18.setPhoto("assets/sfax.jpg");
+        object19.setNomVille("medenine");
+        object19.setPhoto("assets/medenine.jpg");
+        object20.setNomVille("djerba");
+        object20.setPhoto("assets/djerba.jpg");
+        object21.setNomVille("gafsa");
+        object21.setPhoto("assets/gafsa.jpg");
+        object22.setNomVille("kairouan");
+        object22.setPhoto("assets/kairouan.jpg");
+        object23.setNomVille("kasserine");
+        object23.setPhoto("/assets/kasserine.jpg");
+        object24.setNomVille("kebili");
+        object24.setPhoto("/assets/kebili.jpg");
+        listVille.add(object3);
+        listVille.add(object1);
+        listVille.add(object2);
+        listVille.add(object4);
+        listVille.add(object5);
+        listVille.add(object6);
+        listVille.add(object7);
+        listVille.add(object8);
+        listVille.add(object9);
+        listVille.add(object10);
+        listVille.add(object11);
+        listVille.add(object12);
+        listVille.add(object13);
+        listVille.add(object14);
+        listVille.add(object15);
+        listVille.add(object16);
+        listVille.add(object17);
+        listVille.add(object18);
+        listVille.add(object19);
+        listVille.add(object20);
+        listVille.add(object21);
+        listVille.add(object22);
+        listVille.add(object23);
+        listVille.add(object24);
+
+        List<villedynamique> listVillef = new ArrayList<>();
+        for (int value : listrandem) {
+
+            listVillef.add(listVille.get(value));
+        }
+
+        return listVillef;
     }
 }

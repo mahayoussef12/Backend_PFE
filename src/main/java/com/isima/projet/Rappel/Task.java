@@ -7,11 +7,11 @@ import com.isima.projet.Entreprise.EntrepriseRepo;
 import com.isima.projet.Rendez_vous.RDV;
 import com.isima.projet.Rendez_vous.RDVRepository;
 import com.isima.projet.push.PushNotificationService;
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -28,14 +28,16 @@ public class Task {
     private static final Logger log = LoggerFactory.getLogger(Task.class);
     private final RDVRepository repo;
     protected final ClientRepository repoc;
+   @Autowired
     private final PushNotificationService pushNotificationService;
     private final EntrepriseRepo repoen;
-
+    @Autowired
+    public JavaMailSender emailSender;
     private int FixedDelay;
     SimpleDateFormat dateFormat = new
             SimpleDateFormat("yyyy-MM-dd");
-    public static final String ACCOUNT_SID = "AC4ef54b6c78aceb1e328e5e753de97c45";
-    public static final String AUTH_TOKEN = "fc77906e886a27514d7ac38c5e6fbff8";
+    public static final String ACCOUNT_SID = "AC30d125e7034600076cc44a3c286a0f19";
+    public static final String AUTH_TOKEN = "5b3dfa49062cc4b736639b1a6e115bb5";
 
     public Task(RDVRepository repo, ClientRepository repoc, PushNotificationService pushNotificationService, EntrepriseRepo repoen) {
         this.repo = repo;
@@ -58,19 +60,23 @@ public class Task {
                  pushNotificationService.sendPushNotificationToToken();
                  String tel = client.getTel();
                  String tell = entreprise.getTel();
-                 Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+             /*    Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
                  Message message = Message.creator(
                                  new PhoneNumber(tel),//The phone number you are sending text to
-                                 new PhoneNumber("+12396030036"),//The Twilio phone number
+                                 new PhoneNumber("+12342064232"),//The Twilio phone number
                                  "il exciste un rendez vous de Nom" + client.getNom() + client.getPrenom() + date2 + "avec " + entreprise.getNomSociete())
                          .create();
                  Message messagee = Message.creator(
                                  new PhoneNumber(tell),//The phone number you are sending text to
-                                 new PhoneNumber("+12396030036"),//The Twilio phone number
+                                 new PhoneNumber("+12342064232"),//The Twilio phone number
                                  "il exciste un rendez vous de Nom" + client.getNom() + client.getPrenom() + date2 + "avec " + entreprise.getNomSociete() + value.getDate_rdv())
                          .create();
-
-
+*/
+                 SimpleMailMessage message1 = new SimpleMailMessage();
+                 message1.setTo(client.getEmail());
+                 message1.setSubject("Rappel rendez-vous");
+                 message1.setText( "il exciste un rendez vous de Nom" + client.getNom() + client.getPrenom() + date2 + "avec " + entreprise.getNomSociete() + value.getDate_rdv());
+                 this.emailSender.send(message1);
                  log.info("test");
              }
          }

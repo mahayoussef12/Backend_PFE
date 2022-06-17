@@ -102,8 +102,9 @@ RDV rdv=repository.findById(id)
         e.setText("Rendez_vous!");
         e.setEntreprise(rdv.getEntreprise());
         e.setClient(rdv.getClient());
-        er.save(e);
         pushNotificationService.ajouter();
+        er.save(e);
+
         final RDV updatedEntreprise =repository.save(rdv);
         return ResponseEntity.ok(updatedEntreprise);
     }

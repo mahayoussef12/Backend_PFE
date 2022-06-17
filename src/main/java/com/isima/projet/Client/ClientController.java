@@ -7,6 +7,7 @@ import com.isima.projet.Rendez_vous.ResourceNotFoundException;
 import com.isima.projet.User.UserRepository;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -51,8 +52,8 @@ public class ClientController {
 
     @Autowired
     public JavaMailSender emailSender;
-    public static final String ACCOUNT_SID = "AC4ef54b6c78aceb1e328e5e753de97c45";
-    public static final String AUTH_TOKEN = "fc77906e886a27514d7ac38c5e6fbff8";
+    public static final String ACCOUNT_SID = "AC30d125e7034600076cc44a3c286a0f19";
+    public static final String AUTH_TOKEN = "5b3dfa49062cc4b736639b1a6e115bb5";
     @Autowired
     private PasswordEncoder encoder;
     @Autowired
@@ -98,15 +99,13 @@ public class ClientController {
         Smscode smsCode = createSMSCode();
         {
 
-//            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-//            String t="+216"+entreprise.getTel();
-//
-//
-//            Message message = Message.creator(
-//                            new PhoneNumber(t),//The phone number you are sending text to
-//                            new PhoneNumber("+12396030036"),//The Twilio phone number
-//                            "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
-//                    .create();
+            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+            String t="+216"+client1.getTel();
+            Message message1 = Message.creator(
+                            new PhoneNumber(t),//The phone number you are sending text to
+                            new PhoneNumber("+12342064232"),//The Twilio phone number
+                            "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
+                    .create();
 
             SimpleMailMessage messa = new SimpleMailMessage();
             messa.setTo(client1.getEmail());
