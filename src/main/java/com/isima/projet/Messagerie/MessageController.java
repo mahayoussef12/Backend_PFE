@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/api/v1")
 public class MessageController {
 
     @Autowired

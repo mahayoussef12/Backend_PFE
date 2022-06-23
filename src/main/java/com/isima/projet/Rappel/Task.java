@@ -36,10 +36,12 @@ public class Task {
     private int FixedDelay;
     SimpleDateFormat dateFormat = new
             SimpleDateFormat("yyyy-MM-dd");
+
+
     public static final String ACCOUNT_SID = "AC30d125e7034600076cc44a3c286a0f19";
     public static final String AUTH_TOKEN = "5b3dfa49062cc4b736639b1a6e115bb5";
 
-    public Task(RDVRepository repo, ClientRepository repoc, PushNotificationService pushNotificationService, EntrepriseRepo repoen) {
+    public Task(RDVRepository repo, ClientRepository repoc, PushNotificationService pushNotificationService, EntrepriseRepo repoen) throws ParseException {
         this.repo = repo;
         this.repoc = repoc;
         this.pushNotificationService = pushNotificationService;
@@ -52,6 +54,8 @@ public class Task {
          for (RDV value : rdv) {
              Date date1 = dateFormat.parse(String.valueOf(LocalDate.now()));
              Date date2 = dateFormat.parse(String.valueOf(value.getDate_rdv()));
+
+
              int id = (value.getClient().getId());
              long in = (value.getEntreprise().getId());
              if (date1.equals(date2)) {
@@ -77,7 +81,7 @@ public class Task {
                  message1.setSubject("Rappel rendez-vous");
                  message1.setText( "il exciste un rendez vous de Nom" + client.getNom() + client.getPrenom() + date2 + "avec " + entreprise.getNomSociete() + value.getDate_rdv());
                  this.emailSender.send(message1);
-                 log.info("test");
+
              }
          }
         sleep(FixedDelay =200);

@@ -50,17 +50,18 @@ public class ServiceController {
             return repo.save(ser);
         }*/
     @PutMapping("service/update/{id}")
-    public Optional<service> updateService(@PathVariable Integer id, @RequestBody service ser) {
-        return reposer.findById(id)
-                .map(employee -> {
-                    employee.setLib_service(ser.getLib_service());
-                    employee.setDescription(ser.getLib_service());
-                    employee.setPrix_unitaire_HT(ser.getPrix_unitaire_HT());
-                    return reposer.save(employee);
-                });
 
+    public ResponseEntity<service> updateService(@PathVariable(value = "id") Integer id,
+                                                       @RequestBody service newen) throws ResourceNotFoundException {
+        service service = reposer.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+
+        service.setLib_service(newen.getLib_service());
+        service.setDescription(newen.getDescription());
+        service.setPrix_unitaire_HT(newen.getPrix_unitaire_HT());
+        final service updated =reposer.save(service);
+        return ResponseEntity.ok(updated);
     }
-
     @DeleteMapping("/service/delete/{id}")
     public void deleteService(@PathVariable Integer id) {
         serviceservice.delete(id);

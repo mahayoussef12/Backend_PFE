@@ -4,6 +4,7 @@ package com.isima.projet.Rendez_vous;
 import com.isima.projet.Client.ClientRepository;
 import com.isima.projet.Entreprise.EntrepriseRepo;
 import com.isima.projet.Service.ServiceRepository;
+import com.isima.projet.Useer;
 import com.isima.projet.calendrier.domain.Event;
 import com.isima.projet.calendrier.repository.EventRepository;
 import com.isima.projet.push.PushNotificationService;
@@ -14,14 +15,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,6 +61,7 @@ public class RdvController {
                     rdv.setEntreprise(entreprise);
                     rdv.setClient(client);
                     rdv.setAccepter(Boolean.valueOf("false"));
+                    SimpleDateFormat date=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
                     return serviceRdv.save(rdv);
                 });
@@ -109,19 +104,6 @@ RDV rdv=repository.findById(id)
         return ResponseEntity.ok(updatedEntreprise);
     }
 
-
-
-/*    @PutMapping("/employees/{id}")
-    public ResponseEntity<RDV> updateEmployee(@PathVariable(value = "id") int id,
-                                                   @RequestBody RDV employeeDetails) throws ResourceNotFoundException {
-        RDV employee = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
-
-        employee.setDate_rdv(employeeDetails.getDate_rdv());
-
-        final RDV updatedEmployee = repository.save(employee);
-        return ResponseEntity.ok(updatedEmployee);
-    }*/
    @GetMapping("/clients/{EntrepriseId}")
    public ResponseEntity<List<RDV>> getAllRdvEntreprise(@PathVariable(value = "EntrepriseId") Long EntrepriseId) {
 
@@ -150,103 +132,21 @@ RDV rdv=repository.findById(id)
         serviceRdv.delete(id);
 
     }
-    @GetMapping("/client/date/{EntrepriseId}")
-
-    public List getRdvDate(@PathVariable Long EntrepriseId) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
-
-        List<RDV> rdv = repository.findByEntrepriseId(EntrepriseId);
-        List<LocalDateTime> test = new ArrayList<>();
-
-        for (RDV value : rdv)  {
-            Date date2 = dateFormat.parse(String.valueOf(value.getDate_rdv()));
-            if (date1.equals(date2)) test.add(value.getDate_rdv());
-        }
-        return test;
+    @GetMapping("/client/all/{clientID}")
+    public ResponseEntity<List<RDV>> getAllRdv(@PathVariable(value = "clientID") int clientID) {
+        List<RDV> rdv = repository.rdvAll(clientID);
+        return new ResponseEntity<>(rdv, HttpStatus.OK);
     }
-    @GetMapping("/client/client/{EntrepriseId}")
 
-    public List<String> getRdvclient(@PathVariable Long EntrepriseId) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
-
-        List<RDV> rdv = repository.findByEntrepriseId(EntrepriseId);
-        List<String> test = new ArrayList<>();
-        long diff = 0;
-        for (RDV value : rdv)  {
-            Date date2 = dateFormat.parse(String.valueOf(value.getDate_rdv()));
-            if (date1.equals(date2)){
-
-                test.add(value.getClient().getNom()+" "+value.getClient().getPrenom());
-            }
-        }
-        return test;
+    @GetMapping("/client/rdv/{clientID}")
+    public ResponseEntity<List<Useer>> getAllRdvClientrdv(@PathVariable(value = "clientID") int clientID) {
+        List<Useer> rdv = repository.getTest(clientID);
+        return new ResponseEntity<>(rdv, HttpStatus.OK);
     }
-    @GetMapping("/def/{EntrepriseId}")
-    public List defDate(@PathVariable long EntrepriseId) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
-
-        List<RDV> rdv = repository.findByEntrepriseId(EntrepriseId);
-        List<String> test = new ArrayList<>();
-
-        for (RDV value : rdv)  {
-            Date date2 = dateFormat.parse(String.valueOf(value.getDate_rdv()));
-            if (date1.equals(date2)){
-                Duration diff = (Duration.between(LocalDateTime.now(),value.getDate_rdv()));
-                String hms = String.format("%d:%1d:%1d",
-                        diff.toHours(),
-                        diff.toMinutesPart(),
-                        diff.toSecondsPart());
-
-
-                test.add(hms);
-            }
-        }
-        return test;
-    }
-    public Integer hours(LocalDateTime hou) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
-        Date date2 = dateFormat.parse(String.valueOf(LocalDate.parse(hou.toString())));
-        Integer  diff = Math.toIntExact((Duration.between((Temporal) date1, (Temporal) date2).toHours()));
-
-
-        return diff;
-
-    }
-    @GetMapping("/defmin/{EntrepriseId}")
-    public List defDatemin(@PathVariable long EntrepriseId) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date1 = dateFormat.parse(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
-
-        List<RDV> rdv = repository.findByEntrepriseId(EntrepriseId);
-        List<Integer> test = new ArrayList<>();
-
-        for (RDV value : rdv)  {
-            LocalDateTime date2 = (value.getDate_rdv());
-            if (date1.equals(date2)){
-                Integer hour= hours(date2);
-                Integer diff = 0;
-                long l = hour * 60;
-                diff = (int) Duration.between(LocalDateTime.now(),value.getDate_rdv()).toMinutes();
-                long min = l - diff;
-                test.add(diff);
-            }
-        }
-        return test;
-    }
-    @GetMapping("list/{EntrepriseId}")
-    public List test (@PathVariable long EntrepriseId){
-       List<String> test = new ArrayList<>();
-       List<RDV> RDV=repository.findByEntrepriseId(EntrepriseId);
-        for (RDV value : RDV){
-            String date =value.getDate_rdv().toString();
-            test.add(date);
-        }
-        return test;
+    @GetMapping("/entreprise/rdv/{entrepriseId}")
+    public ResponseEntity<List<Useer>> getAllNomClient(@PathVariable(value = "entrepriseId") long entrepriseId) {
+        List<Useer> rdv = repository.getNomclient(entrepriseId);
+        return new ResponseEntity<>(rdv, HttpStatus.OK);
     }
 
 }

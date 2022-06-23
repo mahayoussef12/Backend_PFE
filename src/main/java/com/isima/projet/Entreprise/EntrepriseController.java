@@ -60,11 +60,7 @@ EntrepriseRepo repository;
     }
     @GetMapping("/entreprise/{id}")
     public Entreprise getEntrepriseById(@PathVariable long id) {
-
         return serviceEntreprise.getById(id);  }
-   // @GetMapping("/entreprise/{nomSociete}")
-   /* public Entreprise getEntrepriseByNom(@PathVariable String nomSociete) {
-        return serviceEntreprise.getBynom(nomSociete);  }*/
     @GetMapping("/entrepriseEmail/{email}")
     public List<Entreprise> getAllEmail(@PathVariable String email){return  serviceEntreprise.GetEmail(email);}
     @GetMapping("/entreprise/{categorie}/{ville}")
@@ -116,7 +112,6 @@ EntrepriseRepo repository;
     }
     public static final String DIRECTORY = "C:/Users/HP/Desktop/pfe/src/assets/img/";
     @PostMapping(value ="/entreprise/ajouter",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-
     public Entreprise createEntreprise(@RequestParam("entreprise") String entreprise,@RequestParam("file") MultipartFile file) throws IOException {
       Entreprise entreprise1 = new ObjectMapper().readValue(entreprise, Entreprise.class);
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
@@ -124,41 +119,31 @@ EntrepriseRepo repository;
         copy(file.getInputStream(), fileStorage, REPLACE_EXISTING);
         String filename = file.getOriginalFilename();
         entreprise1.setImage(fileName);
-
        entreprise1.setMdp(encoder.encode(entreprise1.getMdp()));
-
         Smscode smsCode = createSMSCode();
         {
             Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
             String t="+216"+entreprise1.getTel();
-
-
             Message message = Message.creator(
                             new PhoneNumber(t),//The phone number you are sending text to
                             new PhoneNumber("+12342064232"),//The Twilio phone number
                             "Your login verification code is:" + smsCode.getCode()+ "，Valid for 2 minutes")
                     .create();
-
         SimpleMailMessage messa = new SimpleMailMessage();
             messa.setTo(entreprise1.getEmail());
             messa.setSubject("Code");
             messa.setText(smsCode.getCode());
             this.emailSender.send(messa);
-
         }
         entreprise1.setTest(smsCode.getCode());
         entreprise1.setTime((LocalDateTime) smsCode.getExpireTime());
         return serviceEntreprise.save(entreprise1);
-
     }
     private Smscode createSMSCode() {
         //Introducing commons Lang package
         String code = RandomStringUtils.randomNumeric(5);
         return new Smscode(code, 1800);
     }
-
-
-
     @PutMapping("/employees/{id}")
     public ResponseEntity<Entreprise> updateEntreprise(@PathVariable(value = "id") Long id,
                                               @RequestBody Entreprise newen) throws ResourceNotFoundException {
@@ -199,7 +184,6 @@ EntrepriseRepo repository;
     public List testlist()
     {
         List<Integer> list = new ArrayList<>();
-
         list.add(1);
         list.add(2);
         list.add(3);
@@ -217,6 +201,7 @@ EntrepriseRepo repository;
         list.add(15);
         list.add(16);
         list.add(17);
+
         list.add(18);
         list.add(19);
         list.add(20);
@@ -225,7 +210,6 @@ EntrepriseRepo repository;
         list.add(23);
         list.add(24);
         List<Integer> listrandem = new ArrayList<>();
-
         // boundIndex for select in sub list
         Random randomizer = new Random();
         Integer random1 = list.get(randomizer.nextInt(list.size()));
@@ -340,10 +324,10 @@ EntrepriseRepo repository;
 
         List<villedynamique> listVillef = new ArrayList<>();
         for (int value : listrandem) {
-
             listVillef.add(listVille.get(value));
         }
-
         return listVillef;
     }
-}
+
+
+       }
