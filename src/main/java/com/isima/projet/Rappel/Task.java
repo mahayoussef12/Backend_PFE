@@ -54,8 +54,6 @@ public class Task {
          for (RDV value : rdv) {
              Date date1 = dateFormat.parse(String.valueOf(LocalDate.now()));
              Date date2 = dateFormat.parse(String.valueOf(value.getDate_rdv()));
-
-
              int id = (value.getClient().getId());
              long in = (value.getEntreprise().getId());
              if (date1.equals(date2)) {
